@@ -1,0 +1,20 @@
+{
+  "name": "porter-videos",
+  "private": true,
+  "type": "module",
+  "description": "Short looping product videos for the Porter landing: record the live demo with Playwright, edit in Remotion, export small web files.",
+  "scripts": {
+    "record": "node record.mjs",
+    "studio": "remotion studio src/index.jsx",
+    "render": "node render.mjs"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.536",
+    "@remotion/cli": "4.0.536",
+    "@remotion/renderer": "4.0.536",
+    "playwright": "1.64.1",
+    "react": "19.1.10",
+    "react-dom": "19.1.10",
+    "remotion": "4.0.536"
+  }
+}

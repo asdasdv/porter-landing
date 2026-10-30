@@ -1,0 +1,39 @@
+// Receive: open the dialog, find the product, receive 2 boxes, see the robot tasks appear.
+import {writeFileSync} from 'node:fs';
+import {startCapture} from './lib/capture.mjs';
+import {openDemo, director} from './lib/director.mjs';
+
+const {browser, page} = await openDemo();
+const d = director(page);
+await d.place(1050, 560);
+const stop = await startCapture(page, 'raw/receive-frames');
+const t0 = Date.now() / 1000;
+await d.wait(900);
+await d.moveToEl('#receive', {ms: 700});
+await d.wait(150); await d.click(); d.mark('scene', {name: 'dialog'});
+await page.waitForSelector('#productInput');
+await d.wait(350);
+await d.moveToEl('#productInput', {ms: 600, dx: 0.3});
+await d.wait(120); await d.click();
+await d.wait(200);
+await d.type('WAGO 221');
+await page.waitForSelector('#productSuggest [data-p]');
+await d.wait(450);
+await d.moveToEl('#productSuggest [data-p]', {ms: 450, dx: 0.35});
+await d.wait(150); await d.click(); d.mark('scene', {name: 'picked'});
+await d.wait(700);
+await d.moveToEl('#submitBtn', {ms: 600});
+await d.wait(250); await d.click(); d.mark('scene', {name: 'received'});
+await d.wait(1300);
+// The task card follows its box: the app's camera flies to the box at the dock.
+await d.moveToEl('#tasksPanel [data-box]', {ms: 800, dx: 0.4, dy: 0.3});
+await d.wait(300); await d.click(); d.mark('scene', {name: 'follow'});
+await d.wait(500);
+await d.moveTo(300, 760, 700);
+await d.wait(6000);
+const info = await stop('raw/receive.mp4');
+const tasks = await page.locator('#tasksPanel').boundingBox();
+const toast = await page.locator('#toast .toast').first().boundingBox().catch(() => null);
+writeFileSync('raw/receive.json', JSON.stringify({start: t0, firstFrame: info.firstFrame, info, tasks, toast, log: d.log}, null, 1));
+console.log(JSON.stringify({info, tasks, toast, events: d.log.length}));
+await browser.close();
