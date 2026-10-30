@@ -9,7 +9,6 @@
   --accent: #4CA8F8;
   --on-accent: #FFFFFF;
   --shadow-modal: 0 8px 32px rgba(0, 0, 0, 0.16);
-  --shadow-floating: 0 8px 20px rgba(0, 0, 0, 0.04);
   --radius: 12px;
   --radius-sm: 8px;
   --nav-h: 56px;
@@ -78,7 +77,6 @@ img { display: block; max-width: 100%; height: auto; }
   background: var(--surface-elevated);
   -webkit-backdrop-filter: blur(24px);
   backdrop-filter: blur(24px);
-  box-shadow: var(--shadow-floating);
 }
 .nav-row {
   height: var(--nav-h);
