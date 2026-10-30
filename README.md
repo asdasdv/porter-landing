@@ -6,7 +6,7 @@
 
 ## Что внутри
 - `site/` — сам сайт, обычные файлы без сборки: `index.html`, `landing.css`, `landing.js`, картинки в `img/`.
-- `wrangler.jsonc` — настройки Cloudflare Worker `porter`, который отдаёт папку `site/`.
+- `wrangler.jsonc` — настройки Cloudflare Worker `porter-landing`, который отдаёт папку `site/`.
 
 ## Анимации
 Заголовки появляются по словам из размытия, блоки проступают при прокрутке, скриншоты чуть увеличиваются
@@ -22,3 +22,4 @@ cd site && python3 -m http.server 4180
 ## Выкладка на Cloudflare
 Workers Builds, привязанный к этому репозиторию: корневая папка — корень репозитория, команда сборки не нужна,
 команда выкладки — `npx wrangler deploy`. Каждый пуш в `main` выкладывает сайт заново.
+Адрес: https://porter-landing.kaifparty.workers.dev/
