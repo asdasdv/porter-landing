@@ -60,6 +60,19 @@ function updateProgress() {
     if (pct > 0) active = i;
   });
   stepLinks.forEach((a, i) => a.classList.toggle('active', i === active));
+  drift();
+}
+
+// Final block: each screen drifts at its own speed while the section passes by.
+// (Looked up inside drift(): updateProgress() runs once before this point.)
+function drift() {
+  if (reduceMotion || window.innerWidth <= 760) return;
+  const cta = document.getElementById('cta');
+  const collage = cta.querySelectorAll('.collage img');
+  const r = cta.getBoundingClientRect();
+  if (r.bottom < 0 || r.top > window.innerHeight) return;
+  const offset = (r.top + r.height / 2) - window.innerHeight / 2;
+  for (const img of collage) img.style.setProperty('--py', `${(offset * Number(img.dataset.depth)).toFixed(1)}px`);
 }
 let queued = false;
 const onScroll = () => {
