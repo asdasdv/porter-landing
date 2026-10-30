@@ -91,25 +91,35 @@ tabButtons.forEach((b) => b.addEventListener('click', () => pickTab(b.dataset.ta
 // Warm the other screenshots so a tab switch does not flash.
 Object.values(shots).forEach((s) => { const img = new Image(); img.src = s.src; });
 
-// Smooth wheel scrolling with inertia, like Lenis with its default lerp of 0.1.
+// Smooth wheel scrolling, the same way the reference site does it (Lenis inside
+// Framer's "Smooth Scroll", intensity 20): every wheel step starts a fresh glide
+// from where the page is now to the new target, lasting SCROLL_DURATION seconds on
+// Lenis's default easeOutExpo curve. Time-based, so it feels the same at 60 and 120 Hz.
+const SCROLL_DURATION = 2;
+const easeOutExpo = (t) => Math.min(1, 1.001 - 2 ** (-10 * t));
 if (!reduceMotion) {
   let target = 0;
-  let current = 0;
-  let gliding = false;
-  const tick = () => {
-    current += (target - current) * 0.1;
-    if (Math.abs(target - current) < 0.5) { current = target; gliding = false; }
-    window.scrollTo({top: current, behavior: 'instant'});
-    if (gliding) requestAnimationFrame(tick);
+  let from = 0;
+  let animated = 0;
+  let startedAt = 0;
+  let running = false;
+  const tick = (now) => {
+    const progress = Math.max(0, Math.min(1, (now - startedAt) / (SCROLL_DURATION * 1000)));
+    animated = from + (target - from) * easeOutExpo(progress);
+    window.scrollTo({top: animated, behavior: 'instant'});
+    if (progress < 1) requestAnimationFrame(tick);
+    else running = false;
   };
   window.addEventListener('wheel', (e) => {
     if (e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
     const max = document.documentElement.scrollHeight - window.innerHeight;
     if (max <= 1) return;
     e.preventDefault();
-    if (!gliding) { current = window.scrollY; target = window.scrollY; }
-    const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1;
+    if (!running) { animated = window.scrollY; target = window.scrollY; }
+    const unit = e.deltaMode === 1 ? 100 / 6 : e.deltaMode === 2 ? window.innerHeight : 1;
     target = Math.max(0, Math.min(max, target + e.deltaY * unit));
-    if (!gliding) { gliding = true; requestAnimationFrame(tick); }
+    from = animated;
+    startedAt = performance.now();
+    if (!running) { running = true; requestAnimationFrame(tick); }
   }, {passive: false});
 }
