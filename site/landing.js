@@ -39,6 +39,18 @@ if ('IntersectionObserver' in window) {
   blocks.forEach((b) => b.classList.add('in'));
 }
 
+// Step videos play only while on screen (and not at all under reduced motion: the poster stays).
+const loops = [...document.querySelectorAll('video.loop')];
+if (!reduceMotion && 'IntersectionObserver' in window) {
+  const watcher = new IntersectionObserver((entries) => {
+    for (const {target, isIntersecting} of entries) {
+      if (isIntersecting) { target.preload = 'auto'; target.play().catch(() => {}); }
+      else target.pause();
+    }
+  }, {rootMargin: '200px 0px'});
+  loops.forEach((v) => watcher.observe(v));
+}
+
 // Step progress under the header: appears once the step strip scrolls away.
 const strip = document.getElementById('steps');
 const progress = document.querySelector('.progress');

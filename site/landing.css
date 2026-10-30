@@ -158,7 +158,8 @@ img { display: block; max-width: 100%; height: auto; }
   overflow: hidden;
   transition: transform .5s var(--ease-out);
 }
-.shot img { width: 100%; }
+.shot img, .shot video { display: block; width: 100%; height: auto; }
+.shot video { aspect-ratio: 16 / 10; background: var(--surface-primary); }
 
 /* Steps strip */
 .steps { padding: 0 24px 32px; }
