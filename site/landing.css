@@ -16,7 +16,6 @@
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 body {
   margin: 0;
   background: var(--surface-primary);
@@ -99,7 +98,17 @@ img { display: block; max-width: 100%; height: auto; }
 .nav-links a { text-decoration: none; color: var(--content-secondary); }
 .nav-links a:hover { color: var(--content-primary); }
 
-.progress { border-top: 1px solid rgba(0, 0, 0, 0.06); }
+/* Overlays the page under the header instead of growing it, so the page never jumps. */
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+}
 .progress-row {
   padding: 8px 24px 10px;
   display: grid;

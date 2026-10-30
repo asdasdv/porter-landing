@@ -91,35 +91,10 @@ tabButtons.forEach((b) => b.addEventListener('click', () => pickTab(b.dataset.ta
 // Warm the other screenshots so a tab switch does not flash.
 Object.values(shots).forEach((s) => { const img = new Image(); img.src = s.src; });
 
-// Smooth wheel scrolling, the same way the reference site does it (Lenis inside
-// Framer's "Smooth Scroll", intensity 20): every wheel step starts a fresh glide
-// from where the page is now to the new target, lasting SCROLL_DURATION seconds on
-// Lenis's default easeOutExpo curve. Time-based, so it feels the same at 60 and 120 Hz.
-const SCROLL_DURATION = 2;
-const easeOutExpo = (t) => Math.min(1, 1.001 - 2 ** (-10 * t));
-if (!reduceMotion) {
-  let target = 0;
-  let from = 0;
-  let animated = 0;
-  let startedAt = 0;
-  let running = false;
-  const tick = (now) => {
-    const progress = Math.max(0, Math.min(1, (now - startedAt) / (SCROLL_DURATION * 1000)));
-    animated = from + (target - from) * easeOutExpo(progress);
-    window.scrollTo({top: animated, behavior: 'instant'});
-    if (progress < 1) requestAnimationFrame(tick);
-    else running = false;
-  };
-  window.addEventListener('wheel', (e) => {
-    if (e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    if (max <= 1) return;
-    e.preventDefault();
-    if (!running) { animated = window.scrollY; target = window.scrollY; }
-    const unit = e.deltaMode === 1 ? 100 / 6 : e.deltaMode === 2 ? window.innerHeight : 1;
-    target = Math.max(0, Math.min(max, target + e.deltaY * unit));
-    from = animated;
-    startedAt = performance.now();
-    if (!running) { running = true; requestAnimationFrame(tick); }
-  }, {passive: false});
+// Smooth scrolling with Lenis 1.3.26 (vendor/), set up like the reference site:
+// Framer's "Smooth Scroll" at intensity 20 = new Lenis({duration: 2}) with the
+// default easeOutExpo curve. anchors: true makes the header links glide too and
+// respects each section's scroll-margin-top.
+if (!reduceMotion && window.Lenis) {
+  new window.Lenis({duration: 2, autoRaf: true, anchors: true});
 }
