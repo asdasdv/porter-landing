@@ -4,7 +4,6 @@
   --content-secondary: rgba(0, 0, 0, 0.6);
   --surface-primary: #FFFFFF;
   --surface-secondary: rgba(0, 0, 0, 0.04);
-  --surface-elevated: rgba(255, 255, 255, 0.8);
   --line: rgba(0, 0, 0, 0.1);
   --accent: #4CA8F8;
   --on-accent: #FFFFFF;
@@ -74,9 +73,9 @@ img { display: block; max-width: 100%; height: auto; }
   position: sticky;
   top: 0;
   z-index: 10;
-  background: var(--surface-elevated);
-  -webkit-backdrop-filter: blur(24px);
-  backdrop-filter: blur(24px);
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
 }
 .nav-row {
   height: var(--nav-h);
@@ -240,14 +239,23 @@ img { display: block; max-width: 100%; height: auto; }
 .footer a { color: var(--content-secondary); }
 
 /* Motion: words from blur, blocks fade in, screenshots grow on hover */
-.w { display: inline-block; }
+.w {
+  display: inline-block;
+  /* Room for descenders and tight letter-spacing, so the blur layer never clips a glyph. */
+  padding: 0 0.08em 0.2em;
+  margin: 0 -0.08em -0.2em;
+}
 .js [data-words]:not(.split) { opacity: 0; }
 .js .w { opacity: 0; filter: blur(10px); transform: translateY(10px); }
 .js .in .w {
-  animation: word-in .7s var(--ease-out) forwards;
+  /* The resting state has no filter at all, so nothing clips the glyphs after the fade. */
+  opacity: 1;
+  filter: none;
+  transform: none;
+  animation: word-in .7s var(--ease-out) backwards;
   animation-delay: calc(var(--i, 0) * 70ms);
 }
-@keyframes word-in { to { opacity: 1; filter: blur(0); transform: translateY(0); } }
+@keyframes word-in { from { opacity: 0; filter: blur(10px); transform: translateY(10px); } }
 .js .fade { opacity: 0; transition: opacity .9s ease; transition-delay: var(--d, 0ms); }
 .js .in .fade, .js .fade.in { opacity: 1; }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
