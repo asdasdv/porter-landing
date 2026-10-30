@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Porter — a warehouse app where robots do the carrying</title>
+<meta name="description" content="Porter is a concept warehouse app: receive goods, find any box and ship it while robots do the carrying.">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="icon" type="image/png" href="./img/icon.png">
+<link rel="apple-touch-icon" href="./img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./landing.css">
+</head>
+<body>
+
+<header class="nav">
+  <nav class="nav-row wrap">
+    <a class="brand" href="#top"><img src="./img/icon.png" alt="" width="24" height="24">Porter</a>
+    <div class="nav-links">
+      <a href="#store">Receive</a>
+      <a href="#find">Find</a>
+      <a href="#ship">Ship</a>
+      <a href="#analytics">Analytics</a>
+    </div>
+    <a class="btn btn-sm" href="https://warehouse.kaifparty.workers.dev/">Try demo</a>
+  </nav>
+  <div class="progress" hidden>
+    <div class="progress-row wrap">
+      <a href="#store" data-step="0"><span>01 · Receive</span><i><b></b></i></a>
+      <a href="#find" data-step="1"><span>02 · Find</span><i><b></b></i></a>
+      <a href="#ship" data-step="2"><span>03 · Ship</span><i><b></b></i></a>
+      <a href="#analytics" data-step="3"><span>04 · Analytics</span><i><b></b></i></a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="top" class="hero" data-rv>
+    <div class="wrap">
+      <h1 class="title" data-words>Porter is a warehouse app where robots do the carrying.</h1>
+      <div class="hero-stage wallpaper fade" style="--d: 650ms">
+        <div class="shot">
+          <img src="./img/home.webp" alt="Home screen: 3D map of the warehouse with today’s numbers" width="1440" height="900">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="steps" class="steps" data-rv>
+    <div class="wrap fade" style="--d: 300ms">
+      <ol class="step-list">
+        <li><span>01</span>Receive</li>
+        <li><span>02</span>Find</li>
+        <li><span>03</span>Ship</li>
+        <li><span>04</span>Analytics</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="wrap feature-list">
+      <article id="store" class="feat" data-rv>
+        <div class="txt">
+          <h2 class="title" data-words>Goods arrive, robots put them away</h2>
+          <p class="muted fade" style="--d: 300ms">Pick the product and the spot, press Receive. Each box becomes a task, and a free robot carries it to its cell.</p>
+        </div>
+        <div class="media fade" style="--d: 150ms">
+          <div class="shot"><img src="./img/receive.webp" alt="Two boxes received; robots are on their way to put them away" width="1440" height="900" loading="lazy"></div>
+        </div>
+      </article>
+
+      <article id="find" class="feat feat-rev" data-rv>
+        <div class="txt">
+          <h2 class="title" data-words>Any box, two clicks away</h2>
+          <p class="muted fade" style="--d: 300ms">Go from zone to rack to shelf to a single box, or type a name in search. Every box shows where it is and what happened to it.</p>
+        </div>
+        <div class="media fade" style="--d: 150ms">
+          <div class="shot"><img src="./img/find.webp" alt="Box card with its place, details and history" width="1440" height="900" loading="lazy"></div>
+        </div>
+      </article>
+
+      <article id="ship" class="feat" data-rv>
+        <div class="txt">
+          <h2 class="title" data-words>Ship in two clicks</h2>
+          <p class="muted fade" style="--d: 300ms">Ship one box from its card, or press Ship at the top, pick a product and how many — robots bring the nearest boxes to the dispatch station.</p>
+        </div>
+        <div class="media fade" style="--d: 150ms">
+          <div class="shot"><img src="./img/ship.webp" alt="Ship dialog: product, number of boxes, dispatch station" width="1440" height="900" loading="lazy"></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="analytics" class="analytics" data-rv>
+    <div class="wrap">
+      <h2 class="title center" data-words>Keep an eye on everything</h2>
+      <p class="muted center lead fade" style="--d: 250ms">Track your stock, your robots and every box that came in or went out.</p>
+      <div class="tabs-row fade" style="--d: 350ms">
+        <div class="tabs" role="tablist" aria-label="Analytics screens">
+          <button type="button" role="tab" aria-selected="true" data-tab="inventory">Inventory</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="fleet">Fleet</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="history">History</button>
+        </div>
+      </div>
+      <p class="muted small center tab-desc fade" style="--d: 350ms" aria-live="polite">What is in stock, how many boxes, and where they sit.</p>
+      <div class="board fade" style="--d: 450ms">
+        <div class="shot">
+          <img class="tab-shot" src="./img/inventory.webp" alt="Inventory: products, boxes and where they sit" width="1440" height="900" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cta" class="cta" data-rv>
+    <div class="wrap center">
+      <h2 class="hero-title" data-words>Try it yourself.</h2>
+      <div class="fade" style="--d: 300ms"><a class="btn" href="https://warehouse.kaifparty.workers.dev/">Try demo</a></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-row">
+    <span>Porter · concept and design by [Your name] · 2026</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<script type="module" src="./landing.js"></script>
+</body>
+</html>
