@@ -222,40 +222,32 @@ img { display: block; max-width: 100%; height: auto; }
   padding: clamp(16px, 5vw, 64px) 8%;
 }
 
-/* Final call to action: the app's screens scattered around the headline */
-.cta {
-  position: relative;
-  overflow: hidden;
-  min-height: max(760px, 100vh);
-  padding: 200px 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.cta .wrap { max-width: 810px; }
+/* Final call to action: the headline, then two even rows of the app's screens sliding past */
+.cta { padding: 160px 0 128px; overflow: hidden; }
+.cta .wrap { max-width: 810px; padding: 0 24px; }
 .cta .btn { margin-top: 32px; }
-.cta-copy { position: relative; z-index: 1; }
-.collage { position: absolute; inset: 0; pointer-events: none; }
-.collage img {
-  position: absolute;
-  width: var(--cw, clamp(230px, 23vw, 360px));
+.marquee {
+  margin-top: 96px;
+  padding: 16px 0;
+  display: grid;
+  gap: 8px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+}
+.marquee-track { display: flex; width: max-content; animation: marquee 90s linear infinite; }
+.marquee-row.reverse .marquee-track { animation-direction: reverse; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee img {
+  width: clamp(240px, 26vw, 380px);
+  margin: 8px 24px 8px 0; /* the right margin is the gap, so one set is exactly a third of the track */
   aspect-ratio: 16 / 10;
   object-fit: cover;
   object-position: top left;
   border-radius: var(--radius);
   background: var(--surface-primary);
-  box-shadow: var(--shadow-modal);
-  /* Parallax goes through transform; the reveal goes through translate, so they never fight. */
-  transform: translateY(var(--py, 0px)) rotate(var(--r, 0deg));
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
 }
-/* Three screens above the headline and three below, the middle ones smaller and nearer the copy:
-   every screen stays whole inside the section. */
-.collage .c1 { left: 4%; top: 10%; }
-.collage .c3 { right: 4%; top: 8%; }
-.collage .c5 { --cw: clamp(170px, 16vw, 250px); left: calc(50% - var(--cw) / 2); top: 5%; }
-.collage .c2 { left: 7%; bottom: 9%; }
-.collage .c4 { right: 6%; bottom: 8%; }
-.collage .c6 { --cw: clamp(170px, 16vw, 250px); left: calc(50% - var(--cw) / 2); bottom: 5%; }
+@keyframes marquee { to { transform: translateX(calc(-100% / 3)); } }
 
 
 /* Motion: words from blur, blocks fade in, screenshots grow on hover */
@@ -278,8 +270,6 @@ img { display: block; max-width: 100%; height: auto; }
 @keyframes word-in { from { opacity: 0; filter: blur(10px); transform: translateY(10px); } }
 .js .fade { opacity: 0; transition: opacity .9s ease; transition-delay: var(--d, 0ms); }
 .js .in .fade, .js .fade.in { opacity: 1; }
-.js .collage img { opacity: 0; translate: 0 40px; transition: opacity .9s ease, translate 1.1s var(--ease-out); transition-delay: var(--d, 0ms); }
-.js .in .collage img { opacity: 1; translate: 0 0; }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .shot:hover { transform: scale(1.03); }
 }
@@ -287,7 +277,7 @@ img { display: block; max-width: 100%; height: auto; }
   .js .w { opacity: 1; filter: none; transform: none; }
   .js .in .w { animation: none; }
   .js .fade { opacity: 1; transition: none; }
-  .js .collage img { opacity: 1; translate: none; transition: none; }
+  .marquee-track { animation: none; }
 }
 
 /* Phone */
@@ -301,12 +291,9 @@ img { display: block; max-width: 100%; height: auto; }
   .hero-title { font-size: 48px; }
   .progress-row { padding: 6px 16px 8px; gap: 8px; }
   .nav-row { padding: 0 16px; }
-  .hero, .steps, .features, .analytics, .cta { padding-left: 16px; padding-right: 16px; }
-  .cta { min-height: 0; display: block; padding-top: 48px; padding-bottom: 96px; }
-  .collage { position: relative; inset: auto; height: 210px; margin: 0 -16px 24px; }
-  .collage img { width: 52%; }
-  .collage .c1 { left: 2%; top: 4%; bottom: auto; }
-  .collage .c3 { right: 2%; left: auto; top: 0; bottom: auto; }
-  .collage .c2 { left: 24%; top: 34%; bottom: auto; z-index: 1; }
-  .collage .c4, .collage .c5, .collage .c6 { display: none; }
+  .hero, .steps, .features, .analytics { padding-left: 16px; padding-right: 16px; }
+  .cta { padding: 96px 0; }
+  .cta .wrap { padding: 0 16px; }
+  .marquee { margin-top: 56px; }
+  .marquee img { width: 64vw; margin-right: 16px; }
 }
