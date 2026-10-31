@@ -14,6 +14,6 @@ await renderMedia({composition, serveUrl, codec: 'h264', crf: 14, outputLocation
 console.log();
 // Web: 1600 px wide is sharp in the ~830 px card on a retina screen; no audio track.
 execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', master, '-vf', 'scale=1600:-2:flags=lanczos', '-c:v', 'libx264', '-preset', 'slow',
-  '-crf', '24', '-profile:v', 'high', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', '-an', `out/${name}.mp4`]);
+  '-crf', '25', '-profile:v', 'high', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', '-an', `out/${name}.mp4`]);
 execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', master, '-frames:v', '1', '-vf', 'scale=1600:-2', '-q:v', '3', `out/${name}-poster.jpg`]);
 console.log('done', name);
