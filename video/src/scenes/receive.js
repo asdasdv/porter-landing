@@ -7,13 +7,13 @@ export default {
   log: 'receive.json',
   first: 'receive-first.png',
   segments: [
-    {from: 2.35, to: 9.95, rate: 1.1},             // Receive → find the product → Receive 2 boxes
-    {from: 9.95, to: 13.0, rate: 1.3},             // toast and the robot tasks appear
-    {from: 13.0, to: 14.8, rate: 1},               // the app's camera flies to the box on its way to the dock
-    {from: 109.0, to: 113.5, rate: 1.5, cut: true}, // a robot drives up to the belt
-    {from: 113.5, to: 119.6, rate: 1},             // it takes the box and drives off
-    {from: 147.0, to: 150.0, rate: 1, cut: true},  // across the warehouse
-    {from: 168.6, to: 175.6, rate: 1, cut: true},  // the box goes onto its shelf, «put away»
+    {from: 2.35, to: 9.95, rate: 1.1, caption: 'Pick the product and the cell'},             // Receive → find the product → Receive 2 boxes
+    {from: 9.95, to: 13.0, rate: 1.3, caption: 'Each box becomes a robot task'},             // toast and the robot tasks appear
+    {from: 13.0, to: 14.8, rate: 1, caption: 'Each box becomes a robot task'},               // the app's camera flies to the box on its way to the dock
+    {from: 109.0, to: 113.5, rate: 1.5, cut: true, caption: 'A free robot picks it up at the dock'}, // a robot drives up to the belt
+    {from: 113.5, to: 119.6, rate: 1, caption: 'A free robot picks it up at the dock'},             // it takes the box and drives off
+    {from: 147.0, to: 150.0, rate: 1, cut: true, caption: 'Carries it across the warehouse'},  // across the warehouse
+    {from: 168.6, to: 175.6, rate: 1, cut: true, caption: 'Puts it on its shelf'},  // the box goes onto its shelf, «put away»
   ],
   camera: [
     {t: 2.35, s: 1, x: 720, y: 450},

@@ -1,0 +1,11 @@
+// Hero: one full slow turn of the camera around the warehouse (raw/hero.mp4, record-hero.mjs).
+// The drag is steady from ~2 s; 40.1 s shows the same view as 4.0 s (measured by SSIM), so the loop has no seam.
+export default {
+  video: 'hero.mp4',
+  log: 'hero.json',
+  first: 'hero-first.png',
+  segments: [{from: 4.0, to: 40.1, rate: 1}],
+  camera: [{t: 4.0, s: 1, x: 720, y: 450}],
+  cursorUntil: 0,
+  loopFade: 0.4,
+};

@@ -99,16 +99,24 @@ export const Clip = ({scene}) => {
   }
 
   let acc = 0;
-  // A segment with `cut: true` starts a new shot: it dissolves in over CUT seconds while the previous
-  // shot keeps playing underneath (so the timeline length does not change).
-  const CUT = 0.3, cutFrames = Math.round(CUT * fps);
+  // A segment with `cut: true` starts a new shot with a cross-zoom (after GL Transitions' «crosszoom»):
+  // the old shot pushes in and blurs away while the new one settles out of a blurred push-in. The old shot
+  // keeps playing underneath for those frames, so the timeline length does not change.
+  const CUT = 0.5, cutFrames = Math.round(CUT * fps);
   const pieces = scene.segments.map((s, i) => {
     const len = Math.round((s.to - s.from) / s.rate * fps);
     const tail = scene.segments[i + 1]?.cut ? cutFrames : 0;
-    const fadeIn = s.cut ? interpolate(frame - acc, [0, cutFrames], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 1;
+    let style = {};
+    if (s.cut && frame - acc < cutFrames) {
+      const p = ease(Math.max(0, (frame - acc) / cutFrames));
+      style = {opacity: Math.min(1, p * 1.6), transform: `scale(${1.14 - 0.14 * p})`, filter: `blur(${(1 - p) * 18}px)`};
+    } else if (tail && frame >= acc + len) {
+      const p = ease(Math.min(1, (frame - acc - len) / cutFrames));
+      style = {transform: `scale(${1 + 0.14 * p})`, filter: `blur(${p * 18}px)`};
+    }
     const el = (
       <Sequence key={i} from={acc} durationInFrames={len + tail}>
-        <AbsoluteFill style={{opacity: fadeIn}}>
+        <AbsoluteFill style={style}>
           <OffthreadVideo src={staticFile(scene.video)} trimBefore={Math.round(s.from * fps)} playbackRate={s.rate} muted
             style={{width, height}} />
         </AbsoluteFill>
@@ -117,6 +125,18 @@ export const Clip = ({scene}) => {
     acc += len;
     return el;
   });
+
+  // Captions: a segment's `caption` is shown for it and every following segment with the same text.
+  const runs = [];
+  {
+    let at = 0;
+    for (const sg of scene.segments) {
+      const len = (sg.to - sg.from) / sg.rate, last = runs[runs.length - 1];
+      if (sg.caption && last && last.text === sg.caption && Math.abs(last.b - at) < 1e-6) last.b = at + len;
+      else if (sg.caption) runs.push({text: sg.caption, a: at, b: at + len});
+      at += len;
+    }
+  }
 
   const loopOpacity = interpolate(frame, [durationInFrames - scene.loopFade * fps, durationInFrames - 1], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 
@@ -136,6 +156,21 @@ export const Clip = ({scene}) => {
           </div>
         )}
       </div>
+      {runs.map((r, i) => {
+        const fadeIn = interpolate(t, [r.a + 0.15, r.a + 0.55], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+        const fadeOut = interpolate(t, [r.b - 0.3, r.b], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+        const o = Math.min(fadeIn, fadeOut);
+        if (o <= 0) return null;
+        return (
+          <div key={i} style={{position: 'absolute', left: 40, bottom: 40, display: 'flex', alignItems: 'center', gap: 14,
+            padding: '16px 26px 16px 20px', borderRadius: 999, background: 'rgba(255,255,255,.86)',
+            backdropFilter: 'blur(20px) saturate(180%)', boxShadow: '0 8px 30px rgba(0,0,0,.14), 0 0 0 1px rgba(0,0,0,.05)',
+            color: '#111', font: '600 34px/1 Inter, -apple-system, system-ui, sans-serif', letterSpacing: '-.015em',
+            opacity: o, transform: `translateY(${(1 - fadeIn) * 18}px)`}}>
+            <span style={{width: 12, height: 12, borderRadius: 6, background: '#4CA8F8'}} />{r.text}
+          </div>
+        );
+      })}
       {fast && (
         <div style={{position: 'absolute', left: 36, bottom: 36, display: 'flex', alignItems: 'center', gap: 12,
           padding: '12px 20px 12px 18px', borderRadius: 999, background: 'rgba(17,17,17,.62)', color: '#fff',

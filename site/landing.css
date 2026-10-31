@@ -160,6 +160,11 @@ img { display: block; max-width: 100%; height: auto; }
 }
 .shot img, .shot video { display: block; width: 100%; height: auto; }
 .shot video { aspect-ratio: 16 / 10; background: var(--surface-primary); }
+.shot:has(video) { position: relative; }
+/* How far the playing video is: a thin line along the bottom edge of its frame. */
+.vbar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(0,0,0,.06); opacity: 0; transition: opacity .3s ease; }
+.vbar b { display: block; height: 100%; background: var(--accent, #4CA8F8); transform-origin: 0 50%; transform: scaleX(0); }
+.vbar.on { opacity: 1; }
 
 /* Steps strip */
 .steps { padding: 0 24px 32px; }
@@ -233,7 +238,7 @@ img { display: block; max-width: 100%; height: auto; }
 .collage { position: absolute; inset: 0; pointer-events: none; }
 .collage img {
   position: absolute;
-  width: clamp(220px, 23vw, 340px);
+  width: var(--cw, clamp(230px, 23vw, 360px));
   aspect-ratio: 16 / 10;
   object-fit: cover;
   object-position: top left;
@@ -243,12 +248,14 @@ img { display: block; max-width: 100%; height: auto; }
   /* Parallax goes through transform; the reveal goes through translate, so they never fight. */
   transform: translateY(var(--py, 0px)) rotate(var(--r, 0deg));
 }
-.collage .c1 { left: 3%; top: 9%; }
-.collage .c2 { left: 9%; bottom: 7%; }
-.collage .c3 { right: 3%; top: 7%; }
-.collage .c4 { right: 9%; bottom: 9%; }
-.collage .c5 { left: 31%; top: -48px; width: clamp(150px, 14vw, 210px); }
-.collage .c6 { right: 29%; bottom: -56px; width: clamp(150px, 14vw, 210px); }
+/* Three screens above the headline and three below, the middle ones smaller and nearer the copy:
+   every screen stays whole inside the section. */
+.collage .c1 { left: 4%; top: 10%; }
+.collage .c3 { right: 4%; top: 8%; }
+.collage .c5 { --cw: clamp(170px, 16vw, 250px); left: calc(50% - var(--cw) / 2); top: 5%; }
+.collage .c2 { left: 7%; bottom: 9%; }
+.collage .c4 { right: 6%; bottom: 8%; }
+.collage .c6 { --cw: clamp(170px, 16vw, 250px); left: calc(50% - var(--cw) / 2); bottom: 5%; }
 
 
 /* Motion: words from blur, blocks fade in, screenshots grow on hover */

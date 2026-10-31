@@ -4,6 +4,7 @@ import receive from './scenes/receive.js';
 import find from './scenes/find.js';
 import ship from './scenes/ship.js';
 import analytics from './scenes/analytics.js';
+import hero from './scenes/hero.js';
 
 export const FPS = 60;
 export const Root = () => (
@@ -16,5 +17,7 @@ export const Root = () => (
       durationInFrames={clipLength(ship, FPS)} defaultProps={{scene: ship}} />
     <Composition id="Analytics" component={Clip} fps={FPS} width={1920} height={1200}
       durationInFrames={clipLength(analytics, FPS)} defaultProps={{scene: analytics}} />
+    <Composition id="Hero" component={Clip} fps={FPS} width={1920} height={1200}
+      durationInFrames={clipLength(hero, FPS)} defaultProps={{scene: hero}} />
   </>
 );
