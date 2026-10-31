@@ -99,12 +99,19 @@ export const Clip = ({scene}) => {
   }
 
   let acc = 0;
+  // A segment with `cut: true` starts a new shot: it dissolves in over CUT seconds while the previous
+  // shot keeps playing underneath (so the timeline length does not change).
+  const CUT = 0.3, cutFrames = Math.round(CUT * fps);
   const pieces = scene.segments.map((s, i) => {
     const len = Math.round((s.to - s.from) / s.rate * fps);
+    const tail = scene.segments[i + 1]?.cut ? cutFrames : 0;
+    const fadeIn = s.cut ? interpolate(frame - acc, [0, cutFrames], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 1;
     const el = (
-      <Sequence key={i} from={acc} durationInFrames={len}>
-        <OffthreadVideo src={staticFile(scene.video)} trimBefore={Math.round(s.from * fps)} playbackRate={s.rate} muted
-          style={{width, height}} />
+      <Sequence key={i} from={acc} durationInFrames={len + tail}>
+        <AbsoluteFill style={{opacity: fadeIn}}>
+          <OffthreadVideo src={staticFile(scene.video)} trimBefore={Math.round(s.from * fps)} playbackRate={s.rate} muted
+            style={{width, height}} />
+        </AbsoluteFill>
       </Sequence>
     );
     acc += len;

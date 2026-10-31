@@ -1,19 +1,19 @@
 // Times: seconds of the raw take (raw/receive.json); positions: CSS px of the 1440x900 demo.
-// The robot takes ~100 s to reach a user's box (it queues behind background boxes on the belt),
-// so the waiting and the drive are fast-forwarded; the robot's own moves play at real speed.
+// The robot takes ~100 s to reach a user's box (it queues behind background boxes on the belt), so the
+// take is edited into shots (`cut: true` dissolves to the next one): the robot arrives and takes the box,
+// drives it across the warehouse, puts it onto its shelf.
 export default {
   video: 'receive.mp4',
   log: 'receive.json',
   first: 'receive-first.png',
   segments: [
-    {from: 2.35, to: 9.95, rate: 1.1},    // Receive → find the product → Receive 2 boxes
-    {from: 9.95, to: 13.0, rate: 1.3},    // toast and the robot tasks appear
-    {from: 13.0, to: 14.8, rate: 1},      // the app's camera flies to the box at the dock
-    {from: 14.8, to: 109.0, rate: 32},    // the box waits its turn on the belt
-    {from: 109.0, to: 113.5, rate: 2},    // a robot drives up to the belt
-    {from: 113.5, to: 119.6, rate: 1},    // it takes the box and drives off
-    {from: 119.6, to: 168.6, rate: 14},   // across the warehouse to the rack
-    {from: 168.6, to: 175.6, rate: 1},    // the box goes onto its shelf, «put away»
+    {from: 2.35, to: 9.95, rate: 1.1},             // Receive → find the product → Receive 2 boxes
+    {from: 9.95, to: 13.0, rate: 1.3},             // toast and the robot tasks appear
+    {from: 13.0, to: 14.8, rate: 1},               // the app's camera flies to the box on its way to the dock
+    {from: 109.0, to: 113.5, rate: 1.5, cut: true}, // a robot drives up to the belt
+    {from: 113.5, to: 119.6, rate: 1},             // it takes the box and drives off
+    {from: 147.0, to: 150.0, rate: 1, cut: true},  // across the warehouse
+    {from: 168.6, to: 175.6, rate: 1, cut: true},  // the box goes onto its shelf, «put away»
   ],
   camera: [
     {t: 2.35, s: 1, x: 720, y: 450},
