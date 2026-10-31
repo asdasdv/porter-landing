@@ -1,7 +1,7 @@
 // Ship: pick a product and how many, robots get the tasks; the camera follows one box.
 import {writeFileSync} from 'node:fs';
 import {startCapture} from './lib/capture.mjs';
-import {openDemo, director} from './lib/director.mjs';
+import {openDemo, director, watchBox} from './lib/director.mjs';
 
 const {browser, page} = await openDemo();
 const d = director(page);
@@ -28,12 +28,13 @@ await d.wait(600);
 await d.moveToEl('#submitBtn', {ms: 550});
 await d.wait(250); await d.click(); d.mark('scene', {name: 'shipped'});
 await d.wait(1300);
+const boxId = await page.locator('#tasksPanel [data-box]').first().getAttribute('data-box');
 await d.moveToEl('#tasksPanel [data-box]', {ms: 800, dx: 0.4, dy: 0.3});
 await d.wait(300); await d.click(); d.mark('scene', {name: 'follow'});
 await d.wait(500);
 await d.moveTo(1290, 760, 800);
-await d.wait(7000);
+await watchBox(page, d, boxId);
 const info = await stop('raw/ship.mp4');
-writeFileSync('raw/ship.json', JSON.stringify({start: t0, info, log: d.log}, null, 1));
+writeFileSync('raw/ship.json', JSON.stringify({boxId, start: t0, info, log: d.log}, null, 1));
 console.log(JSON.stringify({info, events: d.log.length}));
 await browser.close();

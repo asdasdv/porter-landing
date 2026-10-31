@@ -1,12 +1,19 @@
 // Times: seconds of the raw take (raw/receive.json); positions: CSS px of the 1440x900 demo.
+// The robot takes ~100 s to reach a user's box (it queues behind background boxes on the belt),
+// so the waiting and the drive are fast-forwarded; the robot's own moves play at real speed.
 export default {
   video: 'receive.mp4',
   log: 'receive.json',
   first: 'receive-first.png',
   segments: [
-    {from: 2.35, to: 9.95, rate: 1.05},  // Receive → find the product → Receive 2 boxes
-    {from: 9.95, to: 13.0, rate: 1.3},  // toast and the robot tasks appear
-    {from: 13.0, to: 15.8, rate: 1},    // the app's camera flies to the boxes at the dock
+    {from: 2.35, to: 9.95, rate: 1.1},    // Receive → find the product → Receive 2 boxes
+    {from: 9.95, to: 13.0, rate: 1.3},    // toast and the robot tasks appear
+    {from: 13.0, to: 14.8, rate: 1},      // the app's camera flies to the box at the dock
+    {from: 14.8, to: 109.0, rate: 32},    // the box waits its turn on the belt
+    {from: 109.0, to: 113.5, rate: 2},    // a robot drives up to the belt
+    {from: 113.5, to: 119.6, rate: 1},    // it takes the box and drives off
+    {from: 119.6, to: 168.6, rate: 14},   // across the warehouse to the rack
+    {from: 168.6, to: 175.6, rate: 1},    // the box goes onto its shelf, «put away»
   ],
   camera: [
     {t: 2.35, s: 1, x: 720, y: 450},
@@ -14,7 +21,11 @@ export default {
     {t: 3.5, s: 1.42, x: 720, y: 430},
     {t: 9.6, s: 1.42, x: 720, y: 430},
     {t: 10.25, s: 1, x: 720, y: 450},
-    {t: 15.8, s: 1, x: 720, y: 450},
+    {t: 109.0, s: 1, x: 720, y: 450},
+    {t: 111.0, s: 1.35, x: 720, y: 450},
+    {t: 170.9, s: 1.35, x: 720, y: 450},
+    {t: 171.9, s: 1, x: 720, y: 450},
+    {t: 175.6, s: 1, x: 720, y: 450},
   ],
   cursorUntil: 13.7,
   loopFade: 0.3,

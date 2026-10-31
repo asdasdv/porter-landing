@@ -55,3 +55,20 @@ export function director(page) {
     },
   };
 }
+
+// Waits until the followed box's task card is gone (the box is on its shelf or at dispatch), logging each
+// status change with its wall-clock time so the edit can slow down where the robot does something.
+export async function watchBox(page, d, id, {limit = 240000, tail = 3500} = {}) {
+  const t0 = Date.now();
+  let last = null;
+  while (Date.now() - t0 < limit) {
+    const s = await page.evaluate(id => {
+      const c = document.querySelector(`#tasksPanel [data-box="${id}"]`);
+      return c ? c.querySelector('small').textContent + ' | ' + c.querySelector('p').textContent : null;
+    }, id);
+    if (s !== last) { d.mark('status', {s}); console.log(((Date.now() - t0) / 1000).toFixed(1), s); last = s; }
+    if (s === null) break;
+    await page.waitForTimeout(200);
+  }
+  await page.waitForTimeout(tail);
+}

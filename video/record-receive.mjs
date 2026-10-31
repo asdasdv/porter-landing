@@ -1,7 +1,7 @@
 // Receive: open the dialog, find the product, receive 2 boxes, see the robot tasks appear.
 import {writeFileSync} from 'node:fs';
 import {startCapture} from './lib/capture.mjs';
-import {openDemo, director} from './lib/director.mjs';
+import {openDemo, director, watchBox} from './lib/director.mjs';
 
 const {browser, page} = await openDemo();
 const d = director(page);
@@ -26,14 +26,15 @@ await d.moveToEl('#submitBtn', {ms: 600});
 await d.wait(250); await d.click(); d.mark('scene', {name: 'received'});
 await d.wait(1300);
 // The task card follows its box: the app's camera flies to the box at the dock.
+const boxId = await page.locator('#tasksPanel [data-box]').first().getAttribute('data-box');
 await d.moveToEl('#tasksPanel [data-box]', {ms: 800, dx: 0.4, dy: 0.3});
 await d.wait(300); await d.click(); d.mark('scene', {name: 'follow'});
 await d.wait(500);
 await d.moveTo(300, 760, 700);
-await d.wait(6000);
+await watchBox(page, d, boxId);
 const info = await stop('raw/receive.mp4');
 const tasks = await page.locator('#tasksPanel').boundingBox();
 const toast = await page.locator('#toast .toast').first().boundingBox().catch(() => null);
-writeFileSync('raw/receive.json', JSON.stringify({start: t0, firstFrame: info.firstFrame, info, tasks, toast, log: d.log}, null, 1));
+writeFileSync('raw/receive.json', JSON.stringify({boxId, start: t0, firstFrame: info.firstFrame, info, tasks, toast, log: d.log}, null, 1));
 console.log(JSON.stringify({info, tasks, toast, events: d.log.length}));
 await browser.close();

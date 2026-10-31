@@ -20,6 +20,29 @@ function sourceTime(scene, t) {
   return last.to;
 }
 
+// The fast-forward segment under output time t, with how far into it we are (for the badge fade).
+function fastAt(scene, t) {
+  // Neighbouring fast segments form one run, so the badge stays up across them instead of blinking.
+  let acc = 0, runStart = null, hit = null;
+  const segs = scene.segments.map(s => { const len = (s.to - s.from) / s.rate, out = {s, a: acc, b: acc + len}; acc += len; return out; });
+  for (let i = 0; i < segs.length; i++) {
+    const {s, a, b} = segs[i];
+    if (s.rate < 3) { runStart = null; continue; }
+    if (runStart === null) runStart = a;
+    if (t >= a && t < b) {
+      let end = b;
+      for (let j = i + 1; j < segs.length && segs[j].s.rate >= 3; j++) end = segs[j].b;
+      hit = {rate: s.rate, into: t - runStart, left: end - t};
+      break;
+    }
+  }
+  return hit;
+}
+
+const FastIcon = () => (
+  <svg width="22" height="16" viewBox="0 0 22 16"><path d="M1 1.5 L10 8 L1 14.5 Z M11 1.5 L20 8 L11 14.5 Z" fill="#fff" /></svg>
+);
+
 function cameraAt(keys, t) {
   if (t <= keys[0].t) return keys[0];
   for (let i = 1; i < keys.length; i++) {
@@ -59,6 +82,7 @@ export const Clip = ({scene}) => {
   const t = frame / fps;
   const src = sourceTime(scene, t);
   const cam = cameraAt(scene.camera, src);
+  const fast = fastAt(scene, t);
   const tx = width / 2 - cam.x * K * cam.s, ty = height / 2 - cam.y * K * cam.s;
   // keep the frame filled: never pan past the edges
   const clampX = Math.min(0, Math.max(width - width * cam.s, tx));
@@ -105,6 +129,14 @@ export const Clip = ({scene}) => {
           </div>
         )}
       </div>
+      {fast && (
+        <div style={{position: 'absolute', left: 36, bottom: 36, display: 'flex', alignItems: 'center', gap: 12,
+          padding: '12px 20px 12px 18px', borderRadius: 999, background: 'rgba(17,17,17,.62)', color: '#fff',
+          font: '600 26px/1 Inter, -apple-system, system-ui, sans-serif', letterSpacing: '-.01em',
+          opacity: Math.min(1, fast.into / 0.15, fast.left / 0.15)}}>
+          <FastIcon />{Math.round(fast.rate)}×
+        </div>
+      )}
       <Img src={staticFile(scene.first)} style={{position: 'absolute', inset: 0, width, height, opacity: loopOpacity}} />
     </AbsoluteFill>
   );
