@@ -98,18 +98,8 @@
     <div class="wrap">
       <h2 class="title center" data-words>Keep an eye on everything</h2>
       <p class="muted center lead fade" style="--d: 250ms">Track your stock, your robots and every box that came in or went out.</p>
-      <div class="tabs-row fade" style="--d: 350ms">
-        <div class="tabs" role="tablist" aria-label="Analytics screens">
-          <button type="button" role="tab" aria-selected="true" data-tab="inventory">Inventory</button>
-          <button type="button" role="tab" aria-selected="false" data-tab="fleet">Fleet</button>
-          <button type="button" role="tab" aria-selected="false" data-tab="history">History</button>
-        </div>
-      </div>
-      <p class="muted small center tab-desc fade" style="--d: 350ms" aria-live="polite">What is in stock, how many boxes, and where they sit.</p>
-      <div class="board fade" style="--d: 450ms">
-        <div class="shot">
-          <img class="tab-shot" src="./img/inventory.webp" alt="Inventory: products, boxes and where they sit" width="1440" height="900" loading="lazy">
-        </div>
+      <div class="board fade" style="--d: 350ms">
+        <div class="shot"><video class="loop" muted loop playsinline preload="none" width="1600" height="1000" poster="./video/analytics-poster.jpg" aria-label="Inventory, Fleet and History screens one after another"><source src="./video/analytics.webm" type="video/webm"><source src="./video/analytics.mp4" type="video/mp4"></video></div>
       </div>
     </div>
   </section>

@@ -62,7 +62,7 @@ img { display: block; max-width: 100%; height: auto; }
 }
 .btn:hover { color: var(--on-accent); filter: brightness(0.94); }
 .btn-sm { height: 36px; padding: 0 12px; border-radius: var(--radius-sm); }
-.btn:focus-visible, .nav a:focus-visible, .tabs button:focus-visible {
+.btn:focus-visible, .nav a:focus-visible {
   outline: 2px solid var(--content-primary);
   outline-offset: 2px;
 }
@@ -211,34 +211,11 @@ img { display: block; max-width: 100%; height: auto; }
 .analytics { padding: 64px 24px; scroll-margin-top: 112px; }
 .analytics .title { margin: 0 auto 12px; }
 .lead { margin: 0 auto 32px; max-width: 520px; }
-.tabs-row { display: flex; justify-content: center; margin-bottom: 12px; }
-.tabs {
-  display: inline-flex;
-  gap: 4px;
-  padding: 4px;
-  border-radius: var(--radius);
-  background: var(--surface-secondary);
-}
-.tabs button {
-  height: 36px;
-  padding: 0 16px;
-  border: none;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--content-secondary);
-  font: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-.tabs button[aria-selected="true"] { background: var(--surface-primary); color: var(--content-primary); }
-.tab-desc { margin: 0 auto 24px; }
 .board {
   background: var(--surface-secondary);
   border-radius: var(--radius);
   padding: clamp(16px, 5vw, 64px) 8%;
 }
-.board img { aspect-ratio: 16 / 10; object-fit: cover; object-position: top left; }
 
 /* Final call to action: the app's screens scattered around the headline */
 .cta {

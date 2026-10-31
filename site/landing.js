@@ -1,7 +1,3 @@
-const inventoryShot = './img/inventory.webp';
-const fleetShot = './img/fleet.webp';
-const historyShot = './img/history.webp';
-
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // Headings: wrap each word so it can fade in from blur, one after another.
@@ -95,26 +91,6 @@ const onScroll = () => {
 window.addEventListener('scroll', onScroll, {passive: true});
 window.addEventListener('resize', onScroll);
 updateProgress();
-
-// Analytics tabs swap the big screenshot.
-const shots = {
-  inventory: {src: inventoryShot, alt: 'Inventory: products, boxes and where they sit', desc: 'What is in stock, how many boxes, and where they sit.'},
-  fleet: {src: fleetShot, alt: 'Fleet: robots and their tasks', desc: 'Where each robot is and what it is doing right now.'},
-  history: {src: historyShot, alt: 'History of warehouse events', desc: 'Every box received, put away and shipped.'},
-};
-const tabButtons = [...document.querySelectorAll('[data-tab]')];
-const tabImg = document.querySelector('.tab-shot');
-const tabDesc = document.querySelector('.tab-desc');
-function pickTab(key) {
-  const shot = shots[key];
-  tabImg.src = shot.src;
-  tabImg.alt = shot.alt;
-  tabDesc.textContent = shot.desc;
-  tabButtons.forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === key)));
-}
-tabButtons.forEach((b) => b.addEventListener('click', () => pickTab(b.dataset.tab)));
-// Warm the other screenshots so a tab switch does not flash.
-Object.values(shots).forEach((s) => { const img = new Image(); img.src = s.src; });
 
 // Smooth scrolling with Lenis 1.3.26 (vendor/), set up like the reference site:
 // Framer's "Smooth Scroll" at intensity 20 = new Lenis({duration: 2}) with the
