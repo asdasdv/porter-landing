@@ -2,7 +2,11 @@
   "name": "porter-landing",
   "compatibility_date": "2026-10-23",
   "workers_dev": true,
+  "main": "./worker.js",
   "assets": {
-    "directory": "./site"
+    "directory": "./site",
+    "binding": "ASSETS",
+    // Only the videos go through worker.js (for Range); every other file is served directly.
+    "run_worker_first": ["/video/*"]
   }
 }
