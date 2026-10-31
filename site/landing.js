@@ -35,16 +35,46 @@ if ('IntersectionObserver' in window) {
   blocks.forEach((b) => b.classList.add('in'));
 }
 
-// Step videos play only while on screen (and not at all under reduced motion: the poster stays).
+// Step videos: only the one you are looking at plays, and it starts from the beginning when it comes into
+// view, so scrolling to the next block never lands in the middle of its video. «Looking at» = at least 60%
+// of it on screen; of several, the one nearest the middle of the screen. Nothing plays under reduced motion.
 const loops = [...document.querySelectorAll('video.loop')];
-if (!reduceMotion && 'IntersectionObserver' in window) {
-  const watcher = new IntersectionObserver((entries) => {
-    for (const {target, isIntersecting} of entries) {
-      if (isIntersecting) { target.preload = 'auto'; target.play().catch(() => {}); }
-      else target.pause();
+if (!reduceMotion && loops.length) {
+  let active = null, queued = false;
+  // Fetch a video a little before it is needed, so it starts at once.
+  if ('IntersectionObserver' in window) {
+    const near = new IntersectionObserver((entries) => {
+      for (const {target, isIntersecting} of entries) if (isIntersecting) { target.preload = 'auto'; near.unobserve(target); }
+    }, {rootMargin: '600px 0px'});
+    loops.forEach((v) => near.observe(v));
+  }
+  const pickVideo = () => {
+    queued = false;
+    const h = window.innerHeight, mid = h / 2;
+    let best = null, bestDist = Infinity;
+    for (const v of loops) {
+      const r = v.getBoundingClientRect();
+      const seen = Math.max(0, Math.min(r.bottom, h) - Math.max(r.top, 0)) / Math.max(1, r.height);
+      const dist = Math.abs((r.top + r.bottom) / 2 - mid);
+      if (seen >= 0.6 && dist < bestDist) { best = v; bestDist = dist; }
     }
-  }, {rootMargin: '200px 0px'});
-  loops.forEach((v) => watcher.observe(v));
+    if (best === active) return;
+    if (active) active.pause();
+    active = best;
+    if (active) {
+      active.preload = 'auto';
+      try { active.currentTime = 0; } catch {}
+      active.play().catch(() => {});
+    }
+  };
+  const queue = () => { if (!queued) { queued = true; requestAnimationFrame(pickVideo); } };
+  addEventListener('scroll', queue, {passive: true});
+  addEventListener('resize', queue);
+  // A tab in the background stops its video; coming back starts the one on screen afresh.
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { if (active) active.pause(); active = null; } else queue();
+  });
+  queue();
 }
 
 // Step progress under the header: appears once the step strip scrolls away.
