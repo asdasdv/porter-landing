@@ -1,3 +1,4 @@
+// Measures how long a robot takes to reach and deliver a user box: node probe.mjs receive|ship
 import {openDemo} from './lib/director.mjs';
 const kind = process.argv[2];
 const {browser, page} = await openDemo();
