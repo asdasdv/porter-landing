@@ -92,19 +92,25 @@ if (!reduceMotion && loops.length) {
   queue();
 }
 
-// First screen: full width at the top of the page; as you scroll it narrows to the width of the blocks
-// below (the 1300 px column, or the side padding on small screens) and rounds its corners, so it settles
-// into line with them. Clipping, not resizing: the video never reflows.
+// First screen: full screen at the top of the page. While it is pinned, scrolling shrinks it from every side
+// into a card in line with the blocks below: down to under the header, in to the 1300 px column (or the side
+// padding on small screens), up from the bottom, corners rounding to 12 px. Clipping, not resizing: the video
+// never reflows.
+const hero = document.querySelector('.hero');
 const stage = document.querySelector('.hero-stage');
-if (stage && !reduceMotion) {
+if (hero && stage && !reduceMotion) {
   let fitQueued = false;
   const fit = () => {
     fitQueued = false;
-    const vw = document.documentElement.clientWidth;
-    const target = Math.max(vw <= 760 ? 16 : 24, (vw - 1300) / 2);
-    const p = Math.min(1, Math.max(0, window.scrollY / (window.innerHeight * 0.6)));
-    stage.style.setProperty('--inset', `${(target * p).toFixed(1)}px`);
-    stage.style.setProperty('--r', `${(12 * p).toFixed(1)}px`);
+    const vw = document.documentElement.clientWidth, pad = vw <= 760 ? 16 : 24;
+    const travel = Math.max(1, hero.offsetHeight - stage.offsetHeight);
+    const p = Math.min(1, Math.max(0, -hero.getBoundingClientRect().top / travel));
+    const e = p * p * (3 - 2 * p); // ease in and out
+    const set = (name, px) => stage.style.setProperty(name, `${(px * e).toFixed(1)}px`);
+    set('--x', Math.max(pad, (vw - 1300) / 2));
+    set('--t', 84); // the floating header (16 + 52) and a little air
+    set('--b', pad);
+    set('--r', 12);
   };
   const queueFit = () => { if (!fitQueued) { fitQueued = true; requestAnimationFrame(fit); } };
   addEventListener('scroll', queueFit, {passive: true});

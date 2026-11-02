@@ -128,17 +128,19 @@ img { display: block; max-width: 100%; height: auto; }
 .progress i { display: block; height: 2px; border-radius: 2px; background: var(--line); overflow: hidden; }
 .progress b { display: block; height: 2px; width: 0; background: var(--content-primary); }
 
-/* Hero: the map turns behind the whole first screen, under the floating header too; the headline sits on it */
-.hero { padding: 0 0 64px; }
+/* Hero: the map turns behind the whole first screen, under the floating header too; the headline sits on it.
+   The stage stays pinned for a while as you scroll, and landing.js shrinks it from every side (--t, --x, --b,
+   --r) into a card in line with the blocks below; then it scrolls away like them. */
+.hero { height: calc(100svh + 45svh); }
 .hero-stage {
-  position: relative;
+  position: sticky;
+  top: 0;
   height: 100svh;
   min-height: 560px;
   max-height: 1200px;
   overflow: hidden;
   background: #F2F3F4;
-  /* landing.js narrows the block to the width of the blocks below as you scroll (--inset, --r) */
-  clip-path: inset(0 var(--inset, 0px) round var(--r, 0px));
+  clip-path: inset(var(--t, 0px) var(--x, 0px) var(--b, 0px) round var(--r, 0px));
 }
 .hero-map {
   position: absolute;
@@ -153,7 +155,7 @@ img { display: block; max-width: 100%; height: auto; }
   top: 0;
   left: 0;
   padding: calc(68px + clamp(56px, 12vh, 150px)) 0 0 clamp(24px, 5.5vw, 112px);
-  transform: translateX(var(--inset, 0px));
+  transform: translate(var(--x, 0px), var(--t, 0px));
 }
 .hero-copy .hero-title {
   max-width: 15em;
@@ -287,6 +289,8 @@ img { display: block; max-width: 100%; height: auto; }
   .js .in .w { animation: none; }
   .js .fade { opacity: 1; transition: none; }
   .marquee-track { animation: none; }
+  .hero { height: auto; }
+  .hero-stage { position: relative; }
 }
 
 /* Phone */
