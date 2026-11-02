@@ -6,12 +6,20 @@ import {chromium} from 'playwright';
 // DEMO=http://localhost:8765/ records a local build (e.g. a branch) instead of the live demo.
 export const DEMO = process.env.DEMO || 'https://warehouse.kaifparty.workers.dev/';
 
-export async function openDemo() {
+// `width`/`height`/`scale`: CSS viewport and device pixel ratio (frames come out width·scale px wide).
+// `steadyClock`: hand the page's requestAnimationFrame an even 60 fps clock. The demo lowers its 3D resolution
+// (1.5x → 1x) when frames run slow, and the screencast makes them slow, so without it the map comes out soft.
+export async function openDemo({width = 1440, height = 900, scale = 2, steadyClock = false} = {}) {
   const browser = await chromium.launch({channel: 'chromium',
-    args: ['--enable-gpu', '--ignore-gpu-blocklist', '--use-angle=metal', '--force-device-scale-factor=2']});
-  const context = await browser.newContext({viewport: {width: 1440, height: 900}});
-  // The compositor renders at 2x; tell the page too, so the 3D canvas uses a 2x backing store.
-  await context.addInitScript(() => Object.defineProperty(window, 'devicePixelRatio', {get: () => 2, configurable: true}));
+    args: ['--enable-gpu', '--ignore-gpu-blocklist', '--use-angle=metal', `--force-device-scale-factor=${scale}`]});
+  const context = await browser.newContext({viewport: {width, height}});
+  // The compositor renders at `scale`; tell the page too, so the 3D canvas gets a matching backing store.
+  await context.addInitScript((scale) => Object.defineProperty(window, 'devicePixelRatio', {get: () => scale, configurable: true}), scale);
+  if (steadyClock) await context.addInitScript(() => {
+    const raf = window.requestAnimationFrame.bind(window);
+    let real = -1, t = 0;
+    window.requestAnimationFrame = (cb) => raf((now) => { if (now !== real) { real = now; t += 1000 / 60; } cb(t); });
+  });
   const page = await context.newPage();
   await page.goto(DEMO, {waitUntil: 'networkidle'});
   await page.waitForTimeout(4000);

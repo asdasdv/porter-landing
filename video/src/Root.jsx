@@ -17,7 +17,7 @@ export const Root = () => (
       durationInFrames={clipLength(ship, FPS)} defaultProps={{scene: ship}} />
     <Composition id="Analytics" component={Clip} fps={FPS} width={1920} height={1200}
       durationInFrames={clipLength(analytics, FPS)} defaultProps={{scene: analytics}} />
-    <Composition id="Hero" component={Clip} fps={FPS} width={1920} height={1200}
+    <Composition id="Hero" component={Clip} fps={FPS} width={2880} height={1800}
       durationInFrames={clipLength(hero, FPS)} defaultProps={{scene: hero}} />
   </>
 );
