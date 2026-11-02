@@ -105,8 +105,12 @@ if (hero && stage && !reduceMotion) {
     const vw = document.documentElement.clientWidth, pad = vw <= 760 ? 16 : 24;
     const travel = Math.max(1, hero.offsetHeight - stage.offsetHeight);
     const p = Math.min(1, Math.max(0, -hero.getBoundingClientRect().top / travel));
-    const s = 1 - (1 - Math.min(1300, vw - 2 * pad) / vw) * p;
+    const end = Math.min(1300, vw - 2 * pad) / vw, s = 1 - (1 - end) * p;
     stage.style.setProperty('--s', s.toFixed(4));
+    // Scaled down, the card leaves a strip of its full-size box empty below it; pull the next block up so the
+    // gap is the same as between the blocks below (88 px; 32 px on phones), whatever the screen.
+    const gap = vw <= 760 ? 32 : 88, below = parseFloat(getComputedStyle(hero.nextElementSibling).paddingTop) || 0;
+    hero.style.marginBottom = `${(gap - below - (1 - end) * stage.offsetHeight / 2).toFixed(1)}px`;
     stage.style.setProperty('--r', `${(12 * p / s).toFixed(1)}px`); // 12 px once scaled
   };
   const queueFit = () => { if (!fitQueued) { fitQueued = true; requestAnimationFrame(fit); } };
@@ -114,36 +118,3 @@ if (hero && stage && !reduceMotion) {
   addEventListener('resize', queueFit);
   fit();
 }
-
-// Step progress under the header: appears once the first screen has scrolled away.
-const strip = document.getElementById('top');
-const progress = document.querySelector('.progress');
-const stepLinks = [...progress.querySelectorAll('a')];
-const sections = ['store', 'find', 'ship', 'analytics'].map((id) => document.getElementById(id));
-const navHeight = () => document.querySelector('.nav-row').getBoundingClientRect().bottom;
-
-function updateProgress() {
-  progress.hidden = strip.getBoundingClientRect().bottom >= navHeight();
-  const line = window.innerHeight * 0.4;
-  const left = Math.max(0, document.documentElement.scrollHeight - window.innerHeight - window.scrollY);
-  let active = -1;
-  sections.forEach((sec, i) => {
-    const r = sec.getBoundingClientRect();
-    const done = line - r.top;
-    const end = Math.max(1, Math.min(r.height, done + left));
-    const pct = Math.max(0, Math.min(1, done / end));
-    stepLinks[i].querySelector('b').style.width = `${pct * 100}%`;
-    if (pct > 0) active = i;
-  });
-  stepLinks.forEach((a, i) => a.classList.toggle('active', i === active));
-}
-
-let queued = false;
-const onScroll = () => {
-  if (queued) return;
-  queued = true;
-  requestAnimationFrame(() => { queued = false; updateProgress(); });
-};
-window.addEventListener('scroll', onScroll, {passive: true});
-window.addEventListener('resize', onScroll);
-updateProgress();
