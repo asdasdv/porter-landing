@@ -137,6 +137,8 @@ img { display: block; max-width: 100%; height: auto; }
   max-height: 1200px;
   overflow: hidden;
   background: #F2F3F4;
+  /* landing.js narrows the block to the width of the blocks below as you scroll (--inset, --r) */
+  clip-path: inset(0 var(--inset, 0px) round var(--r, 0px));
 }
 .hero-map {
   position: absolute;
@@ -151,6 +153,7 @@ img { display: block; max-width: 100%; height: auto; }
   top: 0;
   left: 0;
   padding: calc(68px + clamp(56px, 12vh, 150px)) 0 0 clamp(24px, 5.5vw, 112px);
+  transform: translateX(var(--inset, 0px));
 }
 .hero-copy .hero-title {
   max-width: 15em;

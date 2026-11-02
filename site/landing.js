@@ -92,6 +92,26 @@ if (!reduceMotion && loops.length) {
   queue();
 }
 
+// First screen: full width at the top of the page; as you scroll it narrows to the width of the blocks
+// below (the 1300 px column, or the side padding on small screens) and rounds its corners, so it settles
+// into line with them. Clipping, not resizing: the video never reflows.
+const stage = document.querySelector('.hero-stage');
+if (stage && !reduceMotion) {
+  let fitQueued = false;
+  const fit = () => {
+    fitQueued = false;
+    const vw = document.documentElement.clientWidth;
+    const target = Math.max(vw <= 760 ? 16 : 24, (vw - 1300) / 2);
+    const p = Math.min(1, Math.max(0, window.scrollY / (window.innerHeight * 0.6)));
+    stage.style.setProperty('--inset', `${(target * p).toFixed(1)}px`);
+    stage.style.setProperty('--r', `${(12 * p).toFixed(1)}px`);
+  };
+  const queueFit = () => { if (!fitQueued) { fitQueued = true; requestAnimationFrame(fit); } };
+  addEventListener('scroll', queueFit, {passive: true});
+  addEventListener('resize', queueFit);
+  fit();
+}
+
 // Step progress under the header: appears once the step strip scrolls away.
 const strip = document.getElementById('steps');
 const progress = document.querySelector('.progress');
