@@ -178,26 +178,6 @@ img { display: block; max-width: 100%; height: auto; }
 .vbar b { display: block; height: 100%; background: var(--accent, #4CA8F8); transform-origin: 0 50%; transform: scaleX(0); }
 .vbar.on { opacity: 1; }
 
-/* Steps strip */
-.steps { padding: 0 24px 32px; }
-.step-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 8px;
-}
-.step-list li {
-  background: var(--surface-secondary);
-  border-radius: var(--radius);
-  padding: 16px;
-  font-size: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.step-list span { font-size: 12px; color: var(--content-secondary); }
 
 /* Feature cards */
 .features { padding: 64px 24px; }
@@ -306,9 +286,14 @@ img { display: block; max-width: 100%; height: auto; }
   .feat .txt { padding: 24px 16px; }
   .hero-title { font-size: 48px; }
   .progress-row { padding: 8px 12px 10px; gap: 8px; }
-  .steps, .features, .analytics { padding-left: 16px; padding-right: 16px; }
+  .features, .analytics { padding-left: 16px; padding-right: 16px; }
   .cta { padding: 96px 0; }
   .cta .wrap { padding: 0 16px; }
   .marquee { margin-top: 56px; }
   .marquee img { width: 64vw; margin-right: 16px; }
+}
+
+/* Header links glide to their section (native, only for jumps; the wheel scrolls as usual) */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
 }

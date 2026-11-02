@@ -115,8 +115,8 @@ if (hero && stage && !reduceMotion) {
   fit();
 }
 
-// Step progress under the header: appears once the step strip scrolls away.
-const strip = document.getElementById('steps');
+// Step progress under the header: appears once the first screen has scrolled away.
+const strip = document.getElementById('top');
 const progress = document.querySelector('.progress');
 const stepLinks = [...progress.querySelectorAll('a')];
 const sections = ['store', 'find', 'ship', 'analytics'].map((id) => document.getElementById(id));
@@ -147,11 +147,3 @@ const onScroll = () => {
 window.addEventListener('scroll', onScroll, {passive: true});
 window.addEventListener('resize', onScroll);
 updateProgress();
-
-// Smooth scrolling with Lenis 1.3.26 (vendor/), set up like the reference site:
-// Framer's "Smooth Scroll" at intensity 20 = new Lenis({duration: 2}) with the
-// default easeOutExpo curve. anchors: true makes the header links glide too and
-// respects each section's scroll-margin-top.
-if (!reduceMotion && window.Lenis) {
-  new window.Lenis({duration: 2, autoRaf: true, anchors: true});
-}
