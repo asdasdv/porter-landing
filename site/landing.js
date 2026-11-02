@@ -92,10 +92,10 @@ if (!reduceMotion && loops.length) {
   queue();
 }
 
-// First screen: full screen at the top of the page. While it is pinned, scrolling shrinks it from every side
-// into a card in line with the blocks below: down to under the header, in to the 1300 px column (or the side
-// padding on small screens), up from the bottom, corners rounding to 12 px. Clipping, not resizing: the video
-// never reflows.
+// First screen: full screen at the top of the page. While it is pinned, scrolling scales it down as a whole,
+// towards its centre, until it is as wide as the blocks below (the 1300 px column, or the side padding on
+// small screens), its corners rounding to 12 px — the way swan.so tucks its last block in. A transform:
+// the video never reflows.
 const hero = document.querySelector('.hero');
 const stage = document.querySelector('.hero-stage');
 if (hero && stage && !reduceMotion) {
@@ -105,12 +105,9 @@ if (hero && stage && !reduceMotion) {
     const vw = document.documentElement.clientWidth, pad = vw <= 760 ? 16 : 24;
     const travel = Math.max(1, hero.offsetHeight - stage.offsetHeight);
     const p = Math.min(1, Math.max(0, -hero.getBoundingClientRect().top / travel));
-    const e = p * p * (3 - 2 * p); // ease in and out
-    const set = (name, px) => stage.style.setProperty(name, `${(px * e).toFixed(1)}px`);
-    set('--x', Math.max(pad, (vw - 1300) / 2));
-    set('--t', 84); // the floating header (16 + 52) and a little air
-    set('--b', pad);
-    set('--r', 12);
+    const s = 1 - (1 - Math.min(1300, vw - 2 * pad) / vw) * p;
+    stage.style.setProperty('--s', s.toFixed(4));
+    stage.style.setProperty('--r', `${(12 * p / s).toFixed(1)}px`); // 12 px once scaled
   };
   const queueFit = () => { if (!fitQueued) { fitQueued = true; requestAnimationFrame(fit); } };
   addEventListener('scroll', queueFit, {passive: true});

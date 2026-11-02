@@ -129,8 +129,8 @@ img { display: block; max-width: 100%; height: auto; }
 .progress b { display: block; height: 2px; width: 0; background: var(--content-primary); }
 
 /* Hero: the map turns behind the whole first screen, under the floating header too; the headline sits on it.
-   The stage stays pinned for a while as you scroll, and landing.js shrinks it from every side (--t, --x, --b,
-   --r) into a card in line with the blocks below; then it scrolls away like them. */
+   The stage stays pinned for a while as you scroll, and landing.js scales it down as a whole (--s), towards
+   its centre, into a card as wide as the blocks below, its corners rounding (--r); then it scrolls away. */
 .hero { height: calc(100svh + 45svh); }
 .hero-stage {
   position: sticky;
@@ -140,7 +140,9 @@ img { display: block; max-width: 100%; height: auto; }
   max-height: 1200px;
   overflow: hidden;
   background: #F2F3F4;
-  clip-path: inset(var(--t, 0px) var(--x, 0px) var(--b, 0px) round var(--r, 0px));
+  transform: scale(var(--s, 1));
+  transform-origin: 50% 50%;
+  clip-path: inset(0 round var(--r, 0px));
 }
 .hero-map {
   position: absolute;
@@ -155,7 +157,6 @@ img { display: block; max-width: 100%; height: auto; }
   top: 0;
   left: 0;
   padding: calc(68px + clamp(56px, 12vh, 150px)) 0 0 clamp(24px, 5.5vw, 112px);
-  transform: translate(var(--x, 0px), var(--t, 0px));
 }
 .hero-copy .hero-title {
   max-width: 15em;
