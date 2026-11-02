@@ -3,7 +3,8 @@
 // its wall-clock time so Remotion can draw the cursor and aim the camera.
 import {chromium} from 'playwright';
 
-export const DEMO = 'https://warehouse.kaifparty.workers.dev/';
+// DEMO=http://localhost:8765/ records a local build (e.g. a branch) instead of the live demo.
+export const DEMO = process.env.DEMO || 'https://warehouse.kaifparty.workers.dev/';
 
 export async function openDemo() {
   const browser = await chromium.launch({channel: 'chromium',

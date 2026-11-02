@@ -1,5 +1,5 @@
 // Times: seconds of the raw take (raw/find.json); positions: CSS px of the 1440x900 demo.
-// zone 1.65 · rack 4.25 · shelf 6.91 · cell 9.43 · box 11.74 · search 15.14 · found 17.63
+// zone 1.65 · rack 4.25 · shelf 6.88 · cell 9.43 · box 11.77 · search 15.11 · found 17.52
 export default {
   video: 'find.mp4',
   log: 'find.json',

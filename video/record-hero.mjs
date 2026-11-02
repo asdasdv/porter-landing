@@ -6,14 +6,26 @@ import {startCapture} from './lib/capture.mjs';
 import {openDemo} from './lib/director.mjs';
 
 const SECONDS = Number(process.argv[2] || 36); // one full turn
+// `clean`: only the 3D map, full frame — the landing's hero lays its headline over it.
+const CLEAN = process.argv.includes('clean');
 const {browser, page} = await openDemo();
+if (CLEAN) {
+  await page.addStyleTag({content: `.ph-topbar, #overview, aside, .map-tags, .lc-tip, #toast { display: none !important }
+    #scene { inset: 0 !important; width: 100% !important; height: 100% !important }`});
+  // Moves with no button down would hover a zone (outline + name tag) when the pointer returns for the next drag.
+  await page.evaluate(() => { for (const t of ['pointermove', 'mousemove']) addEventListener(t, (e) => { if (!e.buttons) e.stopImmediatePropagation(); }, true); });
+  await page.waitForTimeout(2500);
+}
 const h = await page.evaluate(() => document.querySelector('canvas').clientHeight);
 // Turn about the middle of the canvas: the home view puts the warehouse centre there. The pivot stays put
 // on screen, so a full turn (h px) does not fit to the right of it: two half-turn drags, each pressed on
 // the same point. Damping hands over the rest of each drag, so the turn does not hitch.
 const box = await page.evaluate(() => { const r = document.querySelector('canvas').getBoundingClientRect(); return {x: r.left, y: r.top, w: r.width, h: r.height}; });
-const x0 = box.x + box.w / 2, y = box.y + box.h / 2;
+// Clean: turn about the middle of the warehouse body (below the canvas centre) and come a bit closer,
+// so the map fills the block the way an aerial shot does.
+const [x0, y] = CLEAN ? [760, 580] : [box.x + box.w / 2, box.y + box.h / 2];
 await page.mouse.move(x0, y);
+if (CLEAN) { await page.mouse.wheel(0, -250); await page.waitForTimeout(1500); }
 await page.waitForTimeout(1500);
 const stop = await startCapture(page, 'raw/hero-frames');
 await page.waitForTimeout(1000);
