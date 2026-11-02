@@ -10,7 +10,6 @@
   --shadow-modal: 0 8px 32px rgba(0, 0, 0, 0.16);
   --radius: 12px;
   --radius-sm: 8px;
-  --nav-h: 56px;
   --ease-out: cubic-bezier(.22, 1, .36, 1);
 }
 
@@ -67,34 +66,34 @@ img { display: block; max-width: 100%; height: auto; }
   outline-offset: 2px;
 }
 
-/* Header · floating panel */
+/* Header: a floating glass pill over the page, made like the demo's panels
+   (white at 80 %, 12 px blur, a soft shadow, 16 px corners). The step strip drops in under it. */
 .nav {
-  position: sticky;
-  top: 0;
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: calc(100% - 32px);
 }
-/* The glass sits on its own layer: a backdrop-filter on .nav itself would stop the
-   step strip inside it from blurring what is under the strip. */
-.nav::before,
+.nav-row,
 .progress {
-  background: rgba(255, 255, 255, 0.55);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  backdrop-filter: saturate(180%) blur(20px);
-}
-.nav::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
+  background: rgba(255, 255, 255, 0.8);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+  border-radius: 16px;
 }
 .nav-row {
-  height: var(--nav-h);
-  padding: 0 24px;
+  height: 52px;
+  margin: 0;
+  padding: 0 8px 0 14px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  box-sizing: content-box;
+  gap: 32px;
 }
 .brand {
   display: flex;
@@ -109,20 +108,12 @@ img { display: block; max-width: 100%; height: auto; }
 .nav-links a { text-decoration: none; color: var(--content-secondary); }
 .nav-links a:hover { color: var(--content-primary); }
 
-/* Overlays the page under the header instead of growing it, so the page never jumps. */
-.progress {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 100%;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-}
 .progress-row {
-  padding: 8px 24px 10px;
+  margin: 0;
+  padding: 10px 14px 12px;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  box-sizing: content-box;
+  gap: 12px;
 }
 .progress a {
   display: flex;
@@ -137,16 +128,15 @@ img { display: block; max-width: 100%; height: auto; }
 .progress i { display: block; height: 2px; border-radius: 2px; background: var(--line); overflow: hidden; }
 .progress b { display: block; height: 2px; width: 0; background: var(--content-primary); }
 
-/* Hero: the map fills a rounded block under the nav, the headline sits right on it */
-.hero { padding: 8px 24px 64px; }
+/* Hero: the map turns behind the whole first screen, under the floating header too; the headline sits on it */
+.hero { padding: 0 0 64px; }
 .hero-stage {
   position: relative;
-  height: clamp(520px, calc(100svh - var(--nav-h) - 24px), 1040px);
-  border-radius: var(--radius);
+  height: 100svh;
+  min-height: 560px;
+  max-height: 1200px;
   overflow: hidden;
   background: #F2F3F4;
-  /* The map is nearly as light as the page: a hairline keeps the block's edge crisp */
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
 }
 .hero-map {
   position: absolute;
@@ -160,7 +150,7 @@ img { display: block; max-width: 100%; height: auto; }
   z-index: 1;
   top: 0;
   left: 0;
-  padding: 40px;
+  padding: calc(68px + clamp(56px, 12vh, 150px)) 0 0 clamp(24px, 5.5vw, 112px);
 }
 .hero-copy .hero-title {
   max-width: 15em;
@@ -299,15 +289,16 @@ img { display: block; max-width: 100%; height: auto; }
 /* Phone */
 @media (max-width: 760px) {
   .nav-links { display: none; }
-  .hero-stage { height: 76svh; min-height: 480px; }
-  .hero-copy { padding: 24px 20px; }
+  .nav { width: calc(100% - 32px); }
+  .nav-row { justify-content: space-between; }
+  .hero-stage { height: 88svh; min-height: 520px; }
+  .hero-copy { padding: 108px 20px 0; }
   .feature-list { gap: 32px; }
   .feat .media { padding: 0 16px 16px; }
   .feat .txt { padding: 24px 16px; }
   .hero-title { font-size: 48px; }
-  .progress-row { padding: 6px 16px 8px; gap: 8px; }
-  .nav-row { padding: 0 16px; }
-  .hero, .steps, .features, .analytics { padding-left: 16px; padding-right: 16px; }
+  .progress-row { padding: 8px 12px 10px; gap: 8px; }
+  .steps, .features, .analytics { padding-left: 16px; padding-right: 16px; }
   .cta { padding: 96px 0; }
   .cta .wrap { padding: 0 16px; }
   .marquee { margin-top: 56px; }

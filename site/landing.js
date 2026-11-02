@@ -97,7 +97,7 @@ const strip = document.getElementById('steps');
 const progress = document.querySelector('.progress');
 const stepLinks = [...progress.querySelectorAll('a')];
 const sections = ['store', 'find', 'ship', 'analytics'].map((id) => document.getElementById(id));
-const navHeight = () => document.querySelector('.nav-row').offsetHeight;
+const navHeight = () => document.querySelector('.nav-row').getBoundingClientRect().bottom;
 
 function updateProgress() {
   progress.hidden = strip.getBoundingClientRect().bottom >= navHeight();
