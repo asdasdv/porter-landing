@@ -8,10 +8,10 @@ import {execFileSync} from 'node:child_process';
 // Where the camera looks (CSS px of the 1440×900 demo) and how close; `cursor: false` for map-only shots.
 export const FOCUS = {
   today: {x: 1060, y: 380, s: 1.6},
-  occupancy: {x: 560, y: 400, s: 1.4},
-  inventory: {x: 520, y: 320, s: 1.5},
+  occupancy: {x: 520, y: 400, s: 1.4},
+  inventory: {x: 480, y: 320, s: 1.5},
   fleet: {x: 1000, y: 380, s: 1.5},
-  history: {x: 520, y: 320, s: 1.5},
+  history: {x: 480, y: 320, s: 1.5},
   move: {x: 860, y: 450, s: 1.4},
   editor: {x: 720, y: 460, s: 1.15},
   zone: {x: 900, y: 420, s: 1.3},

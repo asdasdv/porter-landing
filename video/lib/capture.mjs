@@ -18,19 +18,21 @@ export async function startCapture(page, dir, {width = 2880, height = 1800, qual
   });
   await cdp.send('Page.startScreencast', {format: 'jpeg', quality, maxWidth: width, maxHeight: height, everyNthFrame: 1});
   return async function stop(outFile, fps = 60) {
+    const stoppedAt = Date.now() / 1000;
     await cdp.send('Page.stopScreencast');
     await new Promise(r => setTimeout(r, 300));
     if (frames.length < 2) throw new Error('No frames captured');
     // concat list: each frame lasts until the next one arrives
     const lines = ['ffconcat version 1.0'];
     for (let i = 0; i < frames.length; i++) {
-      const dur = i < frames.length - 1 ? Math.max(0.001, frames[i + 1].t - frames[i].t) : 1 / fps;
+      // Chrome sends a frame only when something changes, so the last one is held until the capture stopped.
+      const dur = i < frames.length - 1 ? Math.max(0.001, frames[i + 1].t - frames[i].t) : Math.max(1 / fps, stoppedAt - frames[i].t);
       lines.push(`file '${path.basename(frames[i].file)}'`, `duration ${dur.toFixed(4)}`);
     }
     lines.push(`file '${path.basename(frames[frames.length - 1].file)}'`);
     writeFileSync(path.join(dir, 'list.txt'), lines.join('\n'));
     execFileSync('ffmpeg', ['-v', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', path.join(dir, 'list.txt'),
       '-vf', `fps=${fps},format=yuv420p`, '-c:v', 'libx264', '-preset', 'slow', '-crf', '12', outFile]);
-    return {frames: frames.length, seconds: frames[frames.length - 1].t - frames[0].t, firstFrame: frames[0].t};
+    return {frames: frames.length, seconds: Math.max(frames[frames.length - 1].t, stoppedAt) - frames[0].t, firstFrame: frames[0].t};
   };
 }

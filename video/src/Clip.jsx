@@ -139,6 +139,10 @@ export const Clip = ({scene}) => {
   }
 
   const loopOpacity = interpolate(frame, [durationInFrames - scene.loopFade * fps, durationInFrames - 1], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  // The first frame the loop fades into is framed the way the clip starts (zoomed clips start zoomed in).
+  const cam0 = cameraAt(scene.camera, scene.segments[0].from);
+  const x0 = Math.min(0, Math.max(width - width * cam0.s, width / 2 - cam0.x * K * cam0.s));
+  const y0 = Math.min(0, Math.max(height - height * cam0.s, height / 2 - cam0.y * K * cam0.s));
 
   return (
     <AbsoluteFill style={{backgroundColor: '#fff', overflow: 'hidden'}}>
@@ -179,7 +183,8 @@ export const Clip = ({scene}) => {
           <FastIcon />{Math.round(fast.rate)}×
         </div>
       )}
-      <Img src={staticFile(scene.first)} style={{position: 'absolute', inset: 0, width, height, opacity: loopOpacity}} />
+      <Img src={staticFile(scene.first)} style={{position: 'absolute', left: 0, top: 0, width, height, opacity: loopOpacity,
+        transformOrigin: '0 0', transform: `translate(${x0}px, ${y0}px) scale(${cam0.s})`}} />
     </AbsoluteFill>
   );
 };

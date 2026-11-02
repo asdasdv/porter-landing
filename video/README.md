@@ -47,3 +47,12 @@ https://warehouse.kaifparty.workers.dev/ и монтируются в Remotion.
 **Другая сборка демо.** `DEMO=http://localhost:8765/ node record-receive.mjs` снимает не живое демо, а локальную
 сборку (например, ветку: `git archive origin/<ветка> locus-cloudflare | tar -x` и `python3 -m http.server 8765`).
 После пересъёмки робот приезжает в другое время: сверить статусы в `raw/<имя>.json` и сдвинуть сегменты.
+
+**Карточки в ленте последнего блока.** `DEMO=http://localhost:8765/ node record-tiles.mjs [имена]` снимает короткие дубли
+(Today, Occupancy, Inventory, Fleet, Robot lanes, History, Move, Layout editor, Conveyor, Parking, Charging, Zone details,
+Another cell, Big deliveries, New product) — по одному, в каждом метки `a`/`b`. `node make-tiles.mjs` собирает из них
+сцены (`src/scenes/tiles.generated.js`): кусок a→b, камера приближена к нужной части экрана (`FOCUS`). Рендер по одному:
+`node render.mjs Tile-today tile-today 1.5 800 28` → 800 px, ~0,2 МБ; на сайте `site/video/tiles/<имя>.mp4` и обложка
+`.jpg` (кадр на 60 % ролика). Ролики только с картой (Lanes, Conveyor, Parking, Charging) снимаются через камеру самого
+демо: поиск дока или робот из Fleet, затем панели скрываются. Для Charging демо сначала работает ~95 с, пока роботы не
+разрядятся. Рендер Remotion идёт в 3 потока (`CONCURRENCY`), тяжёлые задачи — строго по одной.

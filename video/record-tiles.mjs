@@ -116,10 +116,12 @@ const TILES = {
     await d.moveToEl('[aria-label="View menu"]', {ms: 300});
     await d.click(); await d.wait(400);
     await d.moveToEl('text=Edit warehouse layout', {ms: 300});
-    await d.click(); await d.wait(2500);
+    await d.click();
+    await page.waitForSelector('.ed-ib[data-tool="zone"]');
+    await d.wait(1500);
     d.mark('a');
     await d.wait(400);
-    await d.moveToEl('button[data-tool="zone"]', {ms: 600});
+    await d.moveToEl('.ed-ib[data-tool="zone"]', {ms: 600});
     await d.wait(150); await d.click();
     await d.wait(300);
     await d.moveTo(1170, 420, 700);
@@ -128,7 +130,7 @@ const TILES = {
     await d.moveTo(1390, 820, 1100);
     await page.mouse.up(); d.mark('up');
     await d.wait(700);
-    await d.moveToEl('button[data-tool="row"]', {ms: 700});
+    await d.moveToEl('.ed-ib[data-tool="row"]', {ms: 700});
     await d.wait(150); await d.click();
     await d.wait(300);
     await d.moveTo(1200, 470, 700);
@@ -167,7 +169,7 @@ const TILES = {
     await d.moveToEl('#dialog button.lc-option[data-rack] >> nth=1', {ms: 500, dx: 0.3});
     await d.wait(150); await d.click();
     await d.wait(900);
-    await d.moveToEl('#dialog button.lc-option >> nth=2', {ms: 500, dx: 0.3});
+    await d.moveToEl('#dialog .lc-cell[data-cell="S5-P3"]', {ms: 500});
     await d.wait(150); await d.click();
     await d.wait(1400);
     d.mark('b');
@@ -206,25 +208,58 @@ const TILES = {
     await d.wait(2200);
     d.mark('b');
   },
-  // Map-only close-ups: the camera zooms in to a point and holds while robots and boxes move.
-  ...Object.fromEntries([
-    ['lanes', [760, 470], 5],      // a crossing of robot lanes by the conveyor
-    ['conveyor', [420, 330], 7],   // the belt and its transfer rollers by Receiving
-    ['parking', [700, 600], 6],    // robots waiting in their bays
-    ['charging', [980, 520], 6],   // robots at the chargers
-  ].map(([name, [x, y], steps]) => [name, async (page, d) => {
-    await page.addStyleTag({content: MAP_ONLY});
-    await page.evaluate(() => { for (const t of ['pointermove', 'mousemove']) addEventListener(t, (e) => { if (!e.buttons) e.stopImmediatePropagation(); }, true); });
-    await page.waitForTimeout(1500);
-    await page.mouse.move(x, y);
-    for (let i = 0; i < steps; i++) { await page.mouse.wheel(0, -120); await page.waitForTimeout(250); }
-    await page.waitForTimeout(2500);
-    await page.mouse.move(5, 5);
-    d.mark('a');
-    await d.wait(6500);
-    d.mark('b');
-  }])),
+  // Map-only close-ups. The app's own camera does the flying: to a dock found in search, or after a robot
+  // picked in Fleet; then the panels are hidden and the map runs on its own.
+  async conveyor(page, d) { await dockShot(page, d, 'Receiving 3'); },
+  async parking(page, d) { await dockShot(page, d, 'Dispatch 5'); },
+  async lanes(page, d) {
+    await openFleet(page);
+    await page.locator('#robotPanel .lc-robot', {hasText: 'To pickup'}).first().click();
+    await mapOnly(page, 2500);
+    d.mark('a'); await d.wait(7000); d.mark('b');
+  },
+  // Charging: let the warehouse run until robots run low, follow one that heads off to charge and keep the
+  // clip around the moment it plugs in (marks set from that moment).
+  async charging(page, d) {
+    await page.waitForTimeout(95000);
+    await openFleet(page);
+    const row = page.locator('#robotPanel .lc-robot', {hasText: 'Going to charge'}).first();
+    const id = await row.getAttribute('data-rid');
+    await row.click();
+    await mapOnly(page, 1500);
+    const t0 = Date.now();
+    while (Date.now() - t0 < 60000) {
+      const st = await page.evaluate((id) => document.querySelector(`#robotPanel .lc-robot[data-rid="${id}"]`)?.textContent || '', id);
+      if (/Charging/.test(st) && !/Going to charge/.test(st)) break;
+      await page.waitForTimeout(250);
+    }
+    const now = Date.now() / 1000;
+    await d.wait(3500);
+    d.log.push({t: now - 4.5, type: 'a', x: 0, y: 0}, {t: now + 3, type: 'b', x: 0, y: 0});
+  },
 };
+
+// Map-only shots: hide the panels (the canvas takes the whole window) and stop hover outlines.
+async function mapOnly(page, settle) {
+  await page.addStyleTag({content: MAP_ONLY});
+  await page.evaluate(() => { for (const t of ['pointermove', 'mousemove']) addEventListener(t, (e) => { if (!e.buttons) e.stopImmediatePropagation(); }, true); });
+  await page.mouse.move(5, 5);
+  await page.waitForTimeout(settle);
+}
+async function dockShot(page, d, dock) {
+  await page.click('#phSearchButton'); await page.fill('#search', dock);
+  await page.waitForSelector('#results .ph-row[data-type="dock"]');
+  await page.click('#results .ph-row[data-type="dock"]');
+  await page.waitForTimeout(2500);
+  await mapOnly(page, 1500);
+  d.mark('a'); await d.wait(7000); d.mark('b');
+}
+async function openFleet(page) {
+  await page.getByLabel('Fleet', {exact: true}).click();
+  await page.waitForSelector('#robotPanel .lc-robot');
+  await page.waitForTimeout(600);
+}
+
 
 const names = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(TILES);
 mkdirSync('raw/tiles', {recursive: true});
