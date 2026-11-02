@@ -9,7 +9,9 @@ export const DEMO = process.env.DEMO || 'https://warehouse.kaifparty.workers.dev
 // `width`/`height`/`scale`: CSS viewport and device pixel ratio (frames come out width·scale px wide).
 // `steadyClock`: hand the page's requestAnimationFrame an even 60 fps clock. The demo lowers its 3D resolution
 // (1.5x → 1x) when frames run slow, and the screencast makes them slow, so without it the map comes out soft.
-export async function openDemo({width = 1440, height = 900, scale = 2, steadyClock = false} = {}) {
+// `virtualClock`: the page's time (performance.now and requestAnimationFrame) stands still until
+// `window.__clock.advance(ms)` moves it — for frame-by-frame takes, where each frame may take long to draw.
+export async function openDemo({width = 1440, height = 900, scale = 2, steadyClock = false, virtualClock = false} = {}) {
   const browser = await chromium.launch({channel: 'chromium',
     args: ['--enable-gpu', '--ignore-gpu-blocklist', '--use-angle=metal', `--force-device-scale-factor=${scale}`]});
   const context = await browser.newContext({viewport: {width, height}});
@@ -19,6 +21,14 @@ export async function openDemo({width = 1440, height = 900, scale = 2, steadyClo
     const raf = window.requestAnimationFrame.bind(window);
     let real = -1, t = 0;
     window.requestAnimationFrame = (cb) => raf((now) => { if (now !== real) { real = now; t += 1000 / 60; } cb(t); });
+  });
+  if (virtualClock) await context.addInitScript(() => {
+    const realNow = performance.now.bind(performance), raf = window.requestAnimationFrame.bind(window);
+    // Each read creeps forward a hair, so loops that spend a time budget still end.
+    let virt = null, drift = 0;
+    window.__clock = {start() { virt = realNow(); drift = 0; }, advance(ms) { virt += ms; drift = 0; }};
+    performance.now = () => virt === null ? realNow() : virt + (drift += 1e-3);
+    window.requestAnimationFrame = (cb) => raf((now) => cb(virt === null ? now : virt + drift));
   });
   const page = await context.newPage();
   await page.goto(DEMO, {waitUntil: 'networkidle'});
