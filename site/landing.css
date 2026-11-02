@@ -194,31 +194,49 @@ img { display: block; max-width: 100%; height: auto; }
   padding: clamp(16px, 5vw, 64px) 8%;
 }
 
-/* Final call to action: the headline, then two even rows of the app's screens sliding past */
+/* Final call to action: the headline, then one row of cards sliding past — what the app does, captioned */
 .cta { padding: 160px 0 128px; overflow: hidden; }
 .cta .wrap { max-width: 810px; padding: 0 24px; }
 .cta .btn { margin-top: 32px; }
 .marquee {
   margin-top: 96px;
-  padding: 16px 0;
-  display: grid;
-  gap: 8px;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+  padding: 8px 0 16px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
 }
-.marquee-track { display: flex; width: max-content; animation: marquee 90s linear infinite; }
-.marquee-row.reverse .marquee-track { animation-direction: reverse; }
+.marquee-track { display: flex; align-items: flex-start; width: max-content; animation: marquee 80s linear infinite; }
 .marquee:hover .marquee-track { animation-play-state: paused; }
-.marquee img {
-  width: clamp(240px, 26vw, 380px);
-  margin: 8px 24px 8px 0; /* the right margin is the gap, so one set is exactly a third of the track */
+.tile {
+  width: clamp(260px, 27vw, 400px);
+  margin: 0 24px 0 0; /* the right margin is the gap, so one set is exactly a third of the track */
+}
+.tile-media {
+  aspect-ratio: 5 / 4;
+  display: flex;
+  align-items: center;
+  padding: 0 9%;
+  border-radius: var(--radius);
+  background: var(--surface-secondary);
+}
+.tile-media img {
+  width: 100%;
   aspect-ratio: 16 / 10;
   object-fit: cover;
   object-position: top left;
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
   background: var(--surface-primary);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
 }
+.tile figcaption {
+  margin-top: 16px;
+  padding: 0 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+}
+.tile b { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+.tile span { font-size: 14px; color: var(--content-secondary); }
 @keyframes marquee { to { transform: translateX(calc(-100% / 3)); } }
 
 
@@ -269,7 +287,7 @@ img { display: block; max-width: 100%; height: auto; }
   .cta { padding: 96px 0; }
   .cta .wrap { padding: 0 16px; }
   .marquee { margin-top: 56px; }
-  .marquee img { width: 64vw; margin-right: 16px; }
+  .tile { width: 72vw; margin-right: 16px; }
 }
 
 /* Header links glide to their section (native, only for jumps; the wheel scrolls as usual) */
