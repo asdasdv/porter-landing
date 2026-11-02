@@ -10,7 +10,7 @@ const [id = 'Receive', name = 'receive', posterAt = '0', webWidth = '1600', crf 
 const serveUrl = await bundle({entryPoint: path.resolve('src/index.jsx')});
 const composition = await selectComposition({serveUrl, id});
 const master = `out/${name}-master.mp4`;
-await renderMedia({composition, serveUrl, codec: 'h264', crf: 14, outputLocation: master, concurrency: 6,
+await renderMedia({composition, serveUrl, codec: 'h264', crf: 14, outputLocation: master, concurrency: Number(process.env.CONCURRENCY || 3), // 3: the laptop stays cool
   onProgress: ({progress}) => process.stdout.write(`\r${id}: ${Math.round(progress * 100)}%`)});
 console.log();
 // Web: 1600 px wide is sharp in the ~830 px card on a retina screen; no audio track.

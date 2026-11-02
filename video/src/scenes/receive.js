@@ -10,10 +10,10 @@ export default {
     {from: 2.25, to: 9.85, rate: 1.1, caption: 'Pick the product and the cell'},             // Receive → find the product → Receive 2 boxes
     {from: 9.85, to: 12.9, rate: 1.3, caption: 'Each box becomes a robot task'},             // toast and the robot tasks appear
     {from: 12.9, to: 14.7, rate: 1, caption: 'Each box becomes a robot task'},               // the app's camera flies to the box on its way to the dock
-    {from: 96.5, to: 101.0, rate: 1.5, cut: true, caption: 'A free robot picks it up at the dock'}, // a robot drives up to the belt
-    {from: 101.0, to: 107.1, rate: 1, caption: 'A free robot picks it up at the dock'},             // it takes the box and drives off
-    {from: 134.5, to: 137.5, rate: 1, cut: true, caption: 'Carries it across the warehouse'},  // across the warehouse
-    {from: 156.1, to: 163.1, rate: 1, cut: true, caption: 'Puts it on its shelf'},  // the box goes onto its shelf, «put away»
+    {from: 107.97, to: 112.47, rate: 1.5, cut: true, caption: 'A free robot picks it up at the dock'}, // a robot drives up to the belt
+    {from: 112.47, to: 118.57, rate: 1, caption: 'A free robot picks it up at the dock'},             // it takes the box and drives off
+    {from: 145.97, to: 148.97, rate: 1, cut: true, caption: 'Carries it across the warehouse'},  // across the warehouse
+    {from: 167.57, to: 174.57, rate: 1, cut: true, caption: 'Puts it on its shelf'},  // the box goes onto its shelf, «put away»
   ],
   camera: [
     {t: 2.25, s: 1, x: 720, y: 450},
@@ -21,11 +21,11 @@ export default {
     {t: 3.4, s: 1.42, x: 720, y: 430},
     {t: 9.5, s: 1.42, x: 720, y: 430},
     {t: 10.15, s: 1, x: 720, y: 450},
-    {t: 96.5, s: 1, x: 720, y: 450},
-    {t: 98.5, s: 1.35, x: 720, y: 450},
-    {t: 158.4, s: 1.35, x: 720, y: 450},
-    {t: 159.4, s: 1, x: 720, y: 450},
-    {t: 163.1, s: 1, x: 720, y: 450},
+    {t: 107.97, s: 1, x: 720, y: 450},
+    {t: 109.97, s: 1.35, x: 720, y: 450},
+    {t: 169.87, s: 1.35, x: 720, y: 450},
+    {t: 170.87, s: 1, x: 720, y: 450},
+    {t: 174.57, s: 1, x: 720, y: 450},
   ],
   cursorUntil: 13.6,
   loopFade: 0.3,

@@ -92,6 +92,17 @@ if (!reduceMotion && loops.length) {
   queue();
 }
 
+// Card clips in the last block: every clip on screen plays, the ones that have slid out of view pause.
+const clips = [...document.querySelectorAll('.tile-clip')];
+if (clips.length && 'IntersectionObserver' in window && !reduceMotion) {
+  const seen = new IntersectionObserver((entries) => {
+    for (const {target, isIntersecting} of entries) {
+      if (isIntersecting) { target.preload = 'auto'; target.play().catch(() => {}); } else target.pause();
+    }
+  }, {threshold: 0.2});
+  clips.forEach((v) => seen.observe(v));
+}
+
 // First screen: full screen at the top of the page. While it is pinned, scrolling scales it down as a whole,
 // towards its centre, until it is as wide as the blocks below (the 1300 px column, or the side padding on
 // small screens), its corners rounding to 12 px — the way swan.so tucks its last block in. A transform:

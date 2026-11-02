@@ -5,6 +5,7 @@ import find from './scenes/find.js';
 import ship from './scenes/ship.js';
 import analytics from './scenes/analytics.js';
 import hero from './scenes/hero.js';
+import tiles from './scenes/tiles.generated.js';
 
 export const FPS = 60;
 export const Root = () => (
@@ -19,5 +20,10 @@ export const Root = () => (
       durationInFrames={clipLength(analytics, FPS)} defaultProps={{scene: analytics}} />
     <Composition id="Hero" component={Clip} fps={FPS} width={2880} height={1800}
       durationInFrames={clipLength(hero, FPS)} defaultProps={{scene: hero}} />
+    {/* Short clips for the cards in the landing's last block (make-tiles.mjs) */}
+    {Object.entries(tiles).map(([name, scene]) => (
+      <Composition key={name} id={`Tile-${name}`} component={Clip} fps={FPS} width={1920} height={1200}
+        durationInFrames={clipLength(scene, FPS)} defaultProps={{scene}} />
+    ))}
   </>
 );
