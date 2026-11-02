@@ -8,5 +8,7 @@
     "binding": "ASSETS",
     // Only the videos go through worker.js (for Range); every other file is served directly.
     "run_worker_first": ["/video/*"]
-  }
+  },
+  // Branch previews: Workers Builds runs `npx wrangler preview` for non-main branches, which needs this block.
+  "previews": {}
 }
