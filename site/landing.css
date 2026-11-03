@@ -41,7 +41,7 @@ img { display: block; max-width: 100%; height: auto; }
 .hero-title {
   margin: 0;
   font-weight: 600;
-  font-size: 64px;
+  font-size: clamp(48px, 5.6vw, 84px); /* as big as the app's own headings */
   line-height: 0.95;
   letter-spacing: -0.0625em;
 }
@@ -110,7 +110,7 @@ img { display: block; max-width: 100%; height: auto; }
 
 /* Hero: the headline, then the app over a wallpaper (the header floats above, so the top padding clears it) */
 .hero { padding: 148px 24px 24px; } /* + the 64 px above the features = the 88 px between blocks */
-.hero .title { max-width: 700px; }
+.hero .hero-title { max-width: 14em; }
 .wallpaper { background: #D9DEE3 url(./img/hero-wallpaper.webp) center bottom / cover no-repeat; }
 .hero-stage {
   margin-top: 56px;
@@ -236,7 +236,7 @@ img { display: block; max-width: 100%; height: auto; }
   .feature-list { gap: 32px; }
   .feat .media { padding: 0 16px 16px; }
   .feat .txt { padding: 24px 16px; }
-  .hero-title { font-size: 48px; }
+  .hero-title { font-size: 44px; }
   .features, .more { padding-left: 16px; padding-right: 16px; }
   .more { padding-bottom: 64px; }
   .panel { padding: 32px 0; }
