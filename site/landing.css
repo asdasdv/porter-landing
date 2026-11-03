@@ -239,10 +239,7 @@ img { display: block; max-width: 100%; height: auto; }
 
 /* Footer */
 .foot { padding: 0 24px 48px; font-size: 14px; }
-.foot-row { padding-top: 24px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; }
-.foot-links { display: flex; gap: 24px; }
-.foot-links a { color: var(--content-secondary); text-decoration: none; }
-.foot-links a:hover { color: var(--content-primary); }
+.foot-row { padding-top: 24px; border-top: 1px solid var(--line); }
 
 /* Phone */
 @media (max-width: 760px) {
