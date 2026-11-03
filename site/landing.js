@@ -1,6 +1,6 @@
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Headings: wrap each word so it can fade in from blur, one after another.
+// Headings: wrap each word, then number the words by the line they sit on, so each line rises as one.
 for (const el of document.querySelectorAll('[data-words]')) {
   const words = el.textContent.trim().split(/\s+/);
   el.setAttribute('aria-label', words.join(' '));
@@ -8,13 +8,24 @@ for (const el of document.querySelectorAll('[data-words]')) {
   words.forEach((word, i) => {
     const span = document.createElement('span');
     span.className = 'w';
-    span.style.setProperty('--i', i);
     span.setAttribute('aria-hidden', 'true');
     span.textContent = word;
     el.append(span, i < words.length - 1 ? ' ' : '');
   });
   el.classList.add('split');
 }
+const numberLines = () => {
+  for (const el of document.querySelectorAll('[data-words]')) {
+    let top = null, line = -1;
+    for (const w of el.querySelectorAll('.w')) {
+      if (top === null || Math.abs(w.offsetTop - top) > 4) { top = w.offsetTop; line++; }
+      w.style.setProperty('--i', line);
+    }
+  }
+};
+numberLines();
+document.fonts?.ready.then(numberLines);
+addEventListener('resize', numberLines);
 
 // Reveal each block once it scrolls into view.
 const blocks = [...document.querySelectorAll('[data-rv]')];

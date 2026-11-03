@@ -199,38 +199,37 @@ img { display: block; max-width: 100%; height: auto; }
 @keyframes marquee { to { transform: translateX(calc(-100% / 3)); } }
 
 
-/* Motion: words from blur, blocks fade in, screenshots grow on hover */
-.w {
-  display: inline-block;
-  /* Room for descenders and tight letter-spacing, so the blur layer never clips a glyph. */
-  padding: 0 0.08em 0.2em;
-  margin: 0 -0.08em -0.2em;
+/* Motion, like shuttle.zip: headings rise line by line, text and buttons rise 150 px into place with a soft
+   spring, video blocks also grow a little; screenshots grow on hover. */
+:root {
+  /* A spring with a light overshoot (~7%) and a quick settle, as a CSS easing. */
+  --spring: linear(0, 0.034 1.4%, 0.132 2.9%, 0.29 4.6%, 0.508 6.7%, 0.733 9.1%, 0.867 11%, 0.966 13.1%, 1.03 15.3%,
+    1.064 17.6%, 1.074 19.4%, 1.071 21.6%, 1.054 24.3%, 1.012 31%, 0.998 36.5%, 0.995 42.4%, 1.001 60.7%, 1);
+  --rise: 150px;
 }
+.w { display: inline-block; }
 .js [data-words]:not(.split) { opacity: 0; }
-.js .w { opacity: 0; filter: blur(10px); transform: translateY(10px); }
-.js .in .w {
-  /* The resting state has no filter at all, so nothing clips the glyphs after the fade. */
+/* landing.js numbers each word by its line (--i), so a whole line moves as one. */
+.js .w, .js .fade { opacity: 0; transform: translateY(var(--rise)); }
+.js .grow { transform: translateY(var(--rise)) scale(0.9); }
+.js .in .w, .js .in .fade, .js .fade.in {
   opacity: 1;
-  filter: none;
   transform: none;
-  animation: word-in .7s var(--ease-out) backwards;
-  animation-delay: calc(var(--i, 0) * 70ms);
+  transition: transform 1.2s var(--spring), opacity .7s var(--ease-out);
 }
-@keyframes word-in { from { opacity: 0; filter: blur(10px); transform: translateY(10px); } }
-.js .fade { opacity: 0; transition: opacity .9s ease; transition-delay: var(--d, 0ms); }
-.js .in .fade, .js .fade.in { opacity: 1; }
+.js .in .w { transition-delay: calc(var(--i, 0) * 90ms); }
+.js .in .fade, .js .fade.in { transition-delay: var(--d, 0ms); }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .shot:hover { transform: scale(1.03); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .js .w { opacity: 1; filter: none; transform: none; }
-  .js .in .w { animation: none; }
-  .js .fade { opacity: 1; transition: none; }
+  .js .w, .js .fade { opacity: 1; transform: none; transition: none; }
   .marquee-track { animation: none; }
 }
 
 /* Phone */
 @media (max-width: 760px) {
+  :root { --rise: 80px; }
   .nav-links { display: none; }
   .nav { width: calc(100% - 32px); }
   .nav-row { justify-content: space-between; }
