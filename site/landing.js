@@ -50,6 +50,27 @@ if (nav) {
   addEventListener('resize', measure);
 }
 
+// Header links fill as you read: a block's progress runs from its top reaching the middle of the screen to its
+// bottom reaching it.
+const navLinks = [...document.querySelectorAll('.nav-links a')]
+  .map((a) => [a, document.querySelector(a.getAttribute('href'))]).filter(([, s]) => s);
+if (navLinks.length) {
+  let queued = false;
+  const fill = () => {
+    queued = false;
+    const mid = window.innerHeight / 2;
+    for (const [a, s] of navLinks) {
+      const r = s.getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, (mid - r.top) / r.height));
+      a.style.setProperty('--p', `${(p * 100).toFixed(1)}%`);
+    }
+  };
+  const queue = () => { if (!queued) { queued = true; requestAnimationFrame(fill); } };
+  addEventListener('scroll', queue, {passive: true});
+  addEventListener('resize', queue);
+  fill();
+}
+
 // Reveal each block once it scrolls into view; a block with a [data-rv-anchor] inside (the text of a feature
 // card, centred in a tall card) waits until that part is in view.
 const blocks = [...document.querySelectorAll('[data-rv]')];
