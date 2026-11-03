@@ -24,5 +24,9 @@ cd site && python3 -m http.server 4180
 
 ## Выкладка на Cloudflare
 Workers Builds, привязанный к этому репозиторию: корневая папка — корень репозитория, команда сборки не нужна,
-команда выкладки — `npx wrangler deploy`. Каждый пуш в `main` выкладывает сайт заново.
+команда выкладки — `npx wrangler deploy`. Выкладывается ветка, выбранная в настройках Workers Builds как production
+(на 3 ноября 2026 это `light-style`, не `main`); остальные ветки получают preview-адреса вида
+`<ветка>-porter-landing.kaifparty.workers.dev`. Кнопка «Try demo» ведёт на постоянный адрес демо
+https://warehouse.kaifparty.workers.dev/, не на preview-адрес ветки.
+`site/_headers` задаёт кэширование видео и картинок на сутки.
 Адрес: https://porter-landing.kaifparty.workers.dev/
