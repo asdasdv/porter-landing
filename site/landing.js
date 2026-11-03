@@ -2,8 +2,9 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
 
 // Headings: wrap each word, then number the words by the line they sit on, so each line rises as one.
 for (const el of document.querySelectorAll('[data-words]')) {
-  const words = el.textContent.trim().split(/\s+/);
-  el.setAttribute('aria-label', words.join(' '));
+  // Split at ordinary spaces only: a no-break space keeps a short word with the next one, on one line.
+  const words = el.textContent.trim().split(/[ \t\r\n]+/);
+  el.setAttribute('aria-label', words.join(' ').replace(/\u00a0/g, ' '));
   el.textContent = '';
   words.forEach((word, i) => {
     const span = document.createElement('span');
