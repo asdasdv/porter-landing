@@ -165,7 +165,7 @@ img { display: block; max-width: 100%; height: auto; }
   min-width: 0;
   display: flex;
   flex-direction: column;
-  align-self: center; /* only as tall as the text, so it reveals when the text itself comes into view */
+  align-self: center;
   padding: 40px 24px;
 }
 .feat .txt .title { margin-bottom: 12px; }
@@ -228,11 +228,14 @@ img { display: block; max-width: 100%; height: auto; }
 }
 .js .in .w { transition-delay: calc(var(--i, 0) * 120ms); }
 .js .in .fade, .js .fade.in { transition-delay: var(--d, 0ms); }
+/* A feature card fades in as a whole, so its grey box is never on screen empty; the text and video rise inside it */
+.js .feat[data-rv] { opacity: 0; }
+.js .feat.in { opacity: 1; transition: opacity .8s var(--ease-out); }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .shot:hover { transform: scale(1.03); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .js .w, .js .fade { opacity: 1; transform: none; transition: none; }
+  .js .w, .js .fade, .js .feat[data-rv] { opacity: 1; transform: none; transition: none; }
   .marquee-track { animation: none; }
 }
 

@@ -71,25 +71,20 @@ if (navLinks.length) {
   fill();
 }
 
-// Reveal each block once it scrolls into view; a block with a [data-rv-anchor] inside (the text of a feature
-// card, centred in a tall card) waits until that part is in view.
+// Reveal each block once its top is in view. Checked on scroll, like the header links, so a block never
+// waits on an observer; blocks already scrolled past show too, so a jump never leaves one hidden above.
 const blocks = [...document.querySelectorAll('[data-rv]')];
-const anchor = (b) => b.querySelector('[data-rv-anchor]') || b;
-if ('IntersectionObserver' in window) {
-  const io = new IntersectionObserver((entries) => {
-    if (!entries.some((entry) => entry.isIntersecting)) return;
-    // Show every block that is in view or already scrolled past, so a jump
-    // (anchor link, restored scroll position) never leaves a hidden block above.
-    const bottom = window.innerHeight * 0.88;
-    for (const b of blocks) {
-      if (b.classList.contains('in') || anchor(b).getBoundingClientRect().top > bottom) continue;
-      b.classList.add('in');
-      io.unobserve(anchor(b));
-    }
-  }, {rootMargin: '0px 0px -12% 0px'});
-  blocks.forEach((b) => io.observe(anchor(b)));
-} else {
-  blocks.forEach((b) => b.classList.add('in'));
+if (blocks.length) {
+  let queued = false;
+  const reveal = () => {
+    queued = false;
+    const line = window.innerHeight * 0.88;
+    for (const b of blocks) if (!b.classList.contains('in') && b.getBoundingClientRect().top < line) b.classList.add('in');
+  };
+  const queue = () => { if (!queued) { queued = true; requestAnimationFrame(reveal); } };
+  addEventListener('scroll', queue, {passive: true});
+  addEventListener('resize', queue);
+  reveal();
 }
 
 // Step videos: only the one you are looking at plays, and it starts from the beginning when it comes into
