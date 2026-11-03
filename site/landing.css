@@ -66,34 +66,40 @@ img { display: block; max-width: 100%; height: auto; }
   outline-offset: 2px;
 }
 
-/* Header: a floating glass pill over the page, made like the demo's panels
-   (white at 80 %, 12 px blur, a soft shadow, 16 px corners). */
+/* Header: at the top of the page it spans the content (brand on the headline's left edge, Try demo on the
+   right) with no background; once you scroll it narrows into a floating glass pill made like the demo's panels
+   (white at 80 %, 12 px blur, a soft shadow, 16 px corners). landing.js measures the pill (--pill). */
 .nav {
   position: fixed;
   top: 16px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-width: calc(100% - 32px);
 }
 .nav-row {
+  box-sizing: border-box;
+  width: min(1300px, 100vw - 48px);
+  height: 52px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0);
+  transition: width .6s var(--ease-out), padding .6s var(--ease-out), background-color .4s ease, box-shadow .4s ease;
+}
+.nav.compact .nav-row {
+  width: var(--pill, auto);
+  padding: 0 8px 0 14px;
   background: rgba(255, 255, 255, 0.8);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
-  border-radius: 16px;
 }
-.nav-row {
-  height: 52px;
-  margin: 0;
-  padding: 0 8px 0 14px;
-  display: flex;
-  align-items: center;
-  gap: 32px;
-}
+.nav-row.measure { position: absolute; visibility: hidden; width: max-content; padding: 0 8px 0 14px; transition: none; }
 .brand {
   display: flex;
   align-items: center;
@@ -154,7 +160,7 @@ img { display: block; max-width: 100%; height: auto; }
   min-width: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-self: center; /* only as tall as the text, so it reveals when the text itself comes into view */
   padding: 40px 24px;
 }
 .feat .txt .title { margin-bottom: 12px; }
@@ -229,8 +235,7 @@ img { display: block; max-width: 100%; height: auto; }
 @media (max-width: 760px) {
   :root { --rise: 32px; }
   .nav-links { display: none; }
-  .nav { width: calc(100% - 32px); }
-  .nav-row { justify-content: space-between; }
+  .nav-row, .nav.compact .nav-row { width: calc(100vw - 32px); }
   .hero { padding: 100px 16px 0; }
   .hero-stage { margin-top: 32px; padding: 24px 4%; }
   .feature-list { gap: 32px; }

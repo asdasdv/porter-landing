@@ -27,8 +27,30 @@ numberLines();
 document.fonts?.ready.then(numberLines);
 addEventListener('resize', numberLines);
 
-// Reveal each block once it scrolls into view.
+// Header: spans the content at the top of the page, narrows into the floating pill once you scroll.
+const nav = document.querySelector('.nav');
+if (nav) {
+  // The pill is as wide as its content: measure a hidden copy, so the header itself never animates for it.
+  const measure = () => {
+    const copy = nav.querySelector('.nav-row').cloneNode(true);
+    copy.classList.add('measure');
+    copy.setAttribute('aria-hidden', 'true');
+    nav.append(copy);
+    nav.style.setProperty('--pill', `${Math.ceil(copy.getBoundingClientRect().width)}px`);
+    copy.remove();
+  };
+  const update = () => nav.classList.toggle('compact', window.scrollY > 40);
+  measure();
+  document.fonts?.ready.then(measure);
+  update();
+  addEventListener('scroll', update, {passive: true});
+  addEventListener('resize', measure);
+}
+
+// Reveal each block once it scrolls into view; a block with a [data-rv-anchor] inside (the text of a feature
+// card, centred in a tall card) waits until that part is in view.
 const blocks = [...document.querySelectorAll('[data-rv]')];
+const anchor = (b) => b.querySelector('[data-rv-anchor]') || b;
 if ('IntersectionObserver' in window) {
   const io = new IntersectionObserver((entries) => {
     if (!entries.some((entry) => entry.isIntersecting)) return;
@@ -36,12 +58,12 @@ if ('IntersectionObserver' in window) {
     // (anchor link, restored scroll position) never leaves a hidden block above.
     const bottom = window.innerHeight * 0.88;
     for (const b of blocks) {
-      if (b.classList.contains('in') || b.getBoundingClientRect().top > bottom) continue;
+      if (b.classList.contains('in') || anchor(b).getBoundingClientRect().top > bottom) continue;
       b.classList.add('in');
-      io.unobserve(b);
+      io.unobserve(anchor(b));
     }
   }, {rootMargin: '0px 0px -12% 0px'});
-  blocks.forEach((b) => io.observe(b));
+  blocks.forEach((b) => io.observe(anchor(b)));
 } else {
   blocks.forEach((b) => b.classList.add('in'));
 }
