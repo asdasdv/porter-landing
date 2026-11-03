@@ -154,14 +154,36 @@ export default {
   "cursorUntil": 18.24,
   "loopFade": 0.4
  },
- "zone": {
-  "video": "tile-zone.mp4",
-  "log": "tile-zone.json",
-  "first": "tile-zone-first.png",
+ "layers": {
+  "video": "tile-layers.mp4",
+  "log": "tile-layers.json",
+  "first": "tile-layers-first.png",
+  "segments": [
+   {
+    "from": 0.36,
+    "to": 12.2,
+    "rate": 1
+   }
+  ],
+  "camera": [
+   {
+    "t": 0.36,
+    "s": 1,
+    "x": 720,
+    "y": 450
+   }
+  ],
+  "cursorUntil": 13.2,
+  "loopFade": 0.4
+ },
+ "docks": {
+  "video": "tile-docks.mp4",
+  "log": "tile-docks.json",
+  "first": "tile-docks-first.png",
   "segments": [
    {
     "from": 0.39,
-    "to": 6.79,
+    "to": 8.19,
     "rate": 1
    }
   ],
@@ -173,29 +195,7 @@ export default {
     "y": 450
    }
   ],
-  "cursorUntil": 7.79,
-  "loopFade": 0.4
- },
- "another": {
-  "video": "tile-another.mp4",
-  "log": "tile-another.json",
-  "first": "tile-another-first.png",
-  "segments": [
-   {
-    "from": 1.5399999999999998,
-    "to": 11.4,
-    "rate": 1
-   }
-  ],
-  "camera": [
-   {
-    "t": 1.5399999999999998,
-    "s": 1,
-    "x": 720,
-    "y": 450
-   }
-  ],
-  "cursorUntil": 12.4,
+  "cursorUntil": 9.19,
   "loopFade": 0.4
  },
  "big": {
@@ -242,50 +242,6 @@ export default {
   "cursorUntil": 8.27,
   "loopFade": 0.4
  },
- "lanes": {
-  "video": "tile-lanes.mp4",
-  "log": "tile-lanes.json",
-  "first": "tile-lanes-first.png",
-  "segments": [
-   {
-    "from": 3.64,
-    "to": 10.74,
-    "rate": 1
-   }
-  ],
-  "camera": [
-   {
-    "t": 3.64,
-    "s": 1,
-    "x": 720,
-    "y": 450
-   }
-  ],
-  "cursorUntil": 0,
-  "loopFade": 0.4
- },
- "conveyor": {
-  "video": "tile-conveyor.mp4",
-  "log": "tile-conveyor.json",
-  "first": "tile-conveyor-first.png",
-  "segments": [
-   {
-    "from": 4.79,
-    "to": 11.89,
-    "rate": 1
-   }
-  ],
-  "camera": [
-   {
-    "t": 4.79,
-    "s": 1,
-    "x": 720,
-    "y": 450
-   }
-  ],
-  "cursorUntil": 0,
-  "loopFade": 0.4
- },
  "parking": {
   "video": "tile-parking.mp4",
   "log": "tile-parking.json",
@@ -300,28 +256,6 @@ export default {
   "camera": [
    {
     "t": 4.79,
-    "s": 1,
-    "x": 720,
-    "y": 450
-   }
-  ],
-  "cursorUntil": 0,
-  "loopFade": 0.4
- },
- "charging": {
-  "video": "tile-charging.mp4",
-  "log": "tile-charging.json",
-  "first": "tile-charging-first.png",
-  "segments": [
-   {
-    "from": 153.4,
-    "to": 161,
-    "rate": 1
-   }
-  ],
-  "camera": [
-   {
-    "t": 153.4,
     "s": 1,
     "x": 720,
     "y": 450

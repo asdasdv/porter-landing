@@ -13,14 +13,11 @@ export const FOCUS = {
   history: {x: 720, y: 450, s: 1},
   move: {x: 720, y: 450, s: 1},
   editor: {x: 720, y: 450, s: 1},
-  zone: {x: 720, y: 450, s: 1},
-  another: {x: 720, y: 450, s: 1},
+  layers: {x: 720, y: 450, s: 1},
+  docks: {x: 720, y: 450, s: 1},
   big: {x: 720, y: 450, s: 1},
   product: {x: 720, y: 450, s: 1},
-  lanes: {x: 720, y: 450, s: 1, cursor: false},
-  conveyor: {x: 720, y: 450, s: 1, cursor: false},
   parking: {x: 720, y: 450, s: 1, cursor: false},
-  charging: {x: 720, y: 450, s: 1, cursor: false},
 };
 
 const scenes = {};

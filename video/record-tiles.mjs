@@ -141,37 +141,34 @@ const TILES = {
     await d.wait(1600);
     d.mark('b');
   },
-  // Zone details: open a zone from the panel; the camera flies there and its racks are listed.
-  async zone(page, d) {
-    await d.place(900, 500);
+  // Map layers: in the view menu turn robots, lanes and dock names off, then zones off and back on.
+  async layers(page, d) {
+    await d.place(300, 300);
     d.mark('a');
-    await d.moveToEl('.lc-row[data-pick="zone"][data-id="H"]', {ms: 700, dx: 0.3});
+    await d.moveToEl('[aria-label="View menu"]', {ms: 600});
     await d.wait(150); await d.click();
-    await d.wait(1600);
-    await d.moveToEl('#overview .lc-row[data-pick="rack"] >> nth=1', {ms: 600, dx: 0.3});
-    await d.wait(1800);
+    await d.wait(500);
+    for (const n of [2, 3, 4, 1, 1]) {
+      await d.moveToEl(`#viewMenu .vm-row >> nth=${n}`, {ms: 400});
+      await d.wait(150); await d.click();
+      await d.wait(700);
+    }
+    await d.wait(800);
     d.mark('b');
   },
-  // Another cell: in Receive, skip the suggestion and choose zone, rack and cell yourself.
-  async another(page, d) {
-    await page.click('#receive'); await page.waitForSelector('#productInput');
-    await page.fill('#productInput', 'Finder 40.52'); await page.waitForSelector('#productSuggest [data-p]');
-    await page.click('#productSuggest [data-p]'); await page.waitForTimeout(900);
-    await d.place(700, 500);
+  // Docks: search for a dispatch dock and pick it; the camera flies there.
+  async docks(page, d) {
+    await d.place(700, 400);
     d.mark('a');
-    await d.wait(300);
-    await d.moveToEl('#chooseOther', {ms: 600});
+    await d.moveToEl('#phSearchButton', {ms: 600});
     await d.wait(150); await d.click();
-    await d.wait(900);
-    await d.moveToEl('#dialog [data-zone="C"]', {ms: 500});
+    await d.wait(400);
+    await d.type('Dispatch 3', 90);
+    await page.waitForSelector('#results .ph-row[data-type="dock"]');
+    await d.wait(500);
+    await d.moveToEl('#results .ph-row[data-type="dock"]', {ms: 500, dx: 0.3});
     await d.wait(150); await d.click();
-    await d.wait(900);
-    await d.moveToEl('#dialog button.lc-option[data-rack] >> nth=1', {ms: 500, dx: 0.3});
-    await d.wait(150); await d.click();
-    await d.wait(900);
-    await d.moveToEl('#dialog .lc-cell[data-cell="S5-P3"]', {ms: 500});
-    await d.wait(150); await d.click();
-    await d.wait(1400);
+    await d.wait(3000);
     d.mark('b');
   },
   // Big deliveries: 48 boxes don't fit one cell; the form spreads them from a starting cell.
@@ -208,35 +205,8 @@ const TILES = {
     await d.wait(2200);
     d.mark('b');
   },
-  // Map-only close-ups. The app's own camera does the flying: to a dock found in search, or after a robot
-  // picked in Fleet; then the panels are hidden and the map runs on its own.
-  async conveyor(page, d) { await dockShot(page, d, 'Receiving 3'); },
+  // Parking, map only: the app's own camera flies to a dock found in search, then the panels are hidden.
   async parking(page, d) { await dockShot(page, d, 'Dispatch 5'); },
-  async lanes(page, d) {
-    await openFleet(page);
-    await page.locator('#robotPanel .lc-robot', {hasText: 'To pickup'}).first().click();
-    await mapOnly(page, 2500);
-    d.mark('a'); await d.wait(7000); d.mark('b');
-  },
-  // Charging: let the warehouse run until robots run low, follow one that heads off to charge and keep the
-  // clip around the moment it plugs in (marks set from that moment).
-  async charging(page, d) {
-    await page.waitForTimeout(95000);
-    await openFleet(page);
-    const row = page.locator('#robotPanel .lc-robot', {hasText: 'Going to charge'}).first();
-    const id = await row.getAttribute('data-rid');
-    await row.click();
-    await mapOnly(page, 1500);
-    const t0 = Date.now();
-    while (Date.now() - t0 < 60000) {
-      const st = await page.evaluate((id) => document.querySelector(`#robotPanel .lc-robot[data-rid="${id}"]`)?.textContent || '', id);
-      if (/Charging/.test(st) && !/Going to charge/.test(st)) break;
-      await page.waitForTimeout(250);
-    }
-    const now = Date.now() / 1000;
-    await d.wait(3500);
-    d.log.push({t: now - 4.5, type: 'a', x: 0, y: 0}, {t: now + 3, type: 'b', x: 0, y: 0});
-  },
 };
 
 // Map-only shots: hide the panels (the canvas takes the whole window) and stop hover outlines.
@@ -254,12 +224,6 @@ async function dockShot(page, d, dock) {
   await mapOnly(page, 1500);
   d.mark('a'); await d.wait(7000); d.mark('b');
 }
-async function openFleet(page) {
-  await page.getByLabel('Fleet', {exact: true}).click();
-  await page.waitForSelector('#robotPanel .lc-robot');
-  await page.waitForTimeout(600);
-}
-
 
 const names = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(TILES);
 mkdirSync('raw/tiles', {recursive: true});

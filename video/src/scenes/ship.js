@@ -6,12 +6,12 @@ export default {
   log: 'ship.json',
   first: 'ship-first.png',
   segments: [
-    {from: 1.85, to: 10.9, rate: 1.1, caption: 'Pick a product and how many'},             // Ship → product → 2 boxes → Ship 2 boxes
-    {from: 10.9, to: 14.1, rate: 1.4, caption: 'The app sends robots for the boxes'},             // the robot tasks appear
-    {from: 14.1, to: 16.1, rate: 1, caption: 'The app sends robots for the boxes'},               // the app's camera flies to the box on its rack
-    {from: 48.44, to: 54.44, rate: 1, cut: true, caption: 'The nearest robot takes the box'},    // a robot arrives and takes the box off the rack
-    {from: 66.04, to: 69.04, rate: 1, cut: true, caption: 'Drives it to dispatch'},    // across the warehouse
-    {from: 110.57, to: 117.57, rate: 1, cut: true, caption: 'Puts it on the dispatch belt'},    // the box goes onto the dispatch belt, «shipped»
+    {from: 1.85, to: 10.9, rate: 1.1},             // Ship → product → 2 boxes → Ship 2 boxes
+    {from: 10.9, to: 14.1, rate: 1.4},             // the robot tasks appear
+    {from: 14.1, to: 16.1, rate: 1},               // the app's camera flies to the box on its rack
+    {from: 48.44, to: 54.44, rate: 1, cut: true},    // a robot arrives and takes the box off the rack
+    {from: 66.04, to: 69.04, rate: 1, cut: true},    // across the warehouse
+    {from: 110.57, to: 117.57, rate: 1, cut: true},    // the box goes onto the dispatch belt, «shipped»
   ],
   camera: [
     {t: 1.85, s: 1, x: 720, y: 450},

@@ -103,21 +103,6 @@ if (!reduceMotion && loops.length) {
     }
   };
   const queue = () => { if (!queued) { queued = true; requestAnimationFrame(pickVideo); } };
-  // A thin progress line in each video's frame; only the playing one shows and moves.
-  const bars = new Map(loops.filter((v) => !('ambient' in v.dataset)).map((v) => {
-    const bar = document.createElement('i'); bar.className = 'vbar'; bar.innerHTML = '<b></b>';
-    v.parentElement.append(bar);
-    return [v, bar];
-  }));
-  const tick = () => {
-    for (const [v, bar] of bars) {
-      const on = v === active && v.duration > 0;
-      bar.classList.toggle('on', on);
-      if (on) bar.firstChild.style.transform = `scaleX(${(v.currentTime / v.duration).toFixed(4)})`;
-    }
-    requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
   addEventListener('scroll', queue, {passive: true});
   addEventListener('resize', queue);
   // A tab in the background stops its video; coming back starts the one on screen afresh.

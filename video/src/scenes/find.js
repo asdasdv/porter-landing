@@ -5,10 +5,10 @@ export default {
   log: 'find.json',
   first: 'find-first.png',
   segments: [
-    {from: 1.0, to: 12.4, rate: 1.15, caption: 'Click from the zone down to the box'},  // zone → rack → shelf → cell → box, the camera follows each step
-    {from: 12.4, to: 14.6, rate: 1.8, caption: 'Click from the zone down to the box'},  // box card, the cursor heads for search
-    {from: 14.6, to: 19.0, rate: 1.15, caption: 'Or find it by its number'}, // type a box number, pick it, fly there
-    {from: 19.0, to: 19.9, rate: 1, caption: 'Or find it by its number'},
+    {from: 1.0, to: 12.4, rate: 1.15},  // zone → rack → shelf → cell → box, the camera follows each step
+    {from: 12.4, to: 14.6, rate: 1.8},  // box card, the cursor heads for search
+    {from: 14.6, to: 19.0, rate: 1.15}, // type a box number, pick it, fly there
+    {from: 19.0, to: 19.9, rate: 1},
   ],
   camera: [
     {t: 1.0, s: 1, x: 720, y: 450},
