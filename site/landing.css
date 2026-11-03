@@ -144,7 +144,6 @@ img { display: block; max-width: 100%; height: auto; }
 }
 .shot img, .shot video { display: block; width: 100%; height: auto; }
 .shot video { aspect-ratio: 16 / 10; background: var(--surface-primary); }
-.shot:has(video) { position: relative; }
 
 
 /* Feature cards */
@@ -157,7 +156,7 @@ img { display: block; max-width: 100%; height: auto; }
   background: var(--surface-secondary);
   border-radius: var(--radius);
   overflow: hidden;
-  scroll-margin-top: 112px;
+  scroll-margin-top: 88px; /* the floating header (16 + 52 px) and a little air */
 }
 .feat-rev { flex-direction: row-reverse; }
 .feat .txt {
@@ -239,8 +238,16 @@ img { display: block; max-width: 100%; height: auto; }
   .marquee-track { animation: none; }
 }
 
+/* Footer */
+.foot { padding: 0 24px 48px; font-size: 14px; }
+.foot-row { padding-top: 24px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; }
+.foot-links { display: flex; gap: 24px; }
+.foot-links a { color: var(--content-secondary); text-decoration: none; }
+.foot-links a:hover { color: var(--content-primary); }
+
 /* Phone */
 @media (max-width: 760px) {
+  .foot { padding-left: 16px; padding-right: 16px; }
   :root { --rise: 32px; }
   .nav-links { display: none; }
   .nav-row, .nav.compact .nav-row { width: calc(100vw - 32px); }
