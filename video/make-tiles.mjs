@@ -1,23 +1,22 @@
 // Turns the card takes (raw/tiles/*.json, from record-tiles.mjs) into Remotion scenes: each clip runs from
-// mark `a` to mark `b`, zoomed onto the part of the screen it is about (a card is small, the whole 1440 px
-// screen would be unreadable). Copies the takes, logs and first frames into public/.
+// mark `a` to mark `b` and shows the whole screen, nothing cropped. Copies the takes, logs and first frames into public/.
 // usage: node make-tiles.mjs   → src/scenes/tiles.generated.js
 import {readFileSync, writeFileSync, copyFileSync, existsSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 
-// Where the camera looks (CSS px of the 1440×900 demo) and how close; `cursor: false` for map-only shots.
+// The whole 1440×900 screen (s: 1); `cursor: false` for map-only shots.
 export const FOCUS = {
-  today: {x: 1060, y: 380, s: 1.6},
-  occupancy: {x: 520, y: 400, s: 1.4},
-  inventory: {x: 480, y: 320, s: 1.5},
-  fleet: {x: 1000, y: 380, s: 1.5},
-  history: {x: 480, y: 320, s: 1.5},
-  move: {x: 860, y: 450, s: 1.4},
-  editor: {x: 720, y: 460, s: 1.15},
-  zone: {x: 900, y: 420, s: 1.3},
-  another: {x: 720, y: 450, s: 1.7},
-  big: {x: 720, y: 450, s: 1.7},
-  product: {x: 720, y: 450, s: 1.7},
+  today: {x: 720, y: 450, s: 1},
+  occupancy: {x: 720, y: 450, s: 1},
+  inventory: {x: 720, y: 450, s: 1},
+  fleet: {x: 720, y: 450, s: 1},
+  history: {x: 720, y: 450, s: 1},
+  move: {x: 720, y: 450, s: 1},
+  editor: {x: 720, y: 450, s: 1},
+  zone: {x: 720, y: 450, s: 1},
+  another: {x: 720, y: 450, s: 1},
+  big: {x: 720, y: 450, s: 1},
+  product: {x: 720, y: 450, s: 1},
   lanes: {x: 720, y: 450, s: 1, cursor: false},
   conveyor: {x: 720, y: 450, s: 1, cursor: false},
   parking: {x: 720, y: 450, s: 1, cursor: false},
