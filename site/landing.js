@@ -102,30 +102,3 @@ if (clips.length && 'IntersectionObserver' in window && !reduceMotion) {
   }, {threshold: 0.2});
   clips.forEach((v) => seen.observe(v));
 }
-
-// First screen: full screen at the top of the page. While it is pinned, scrolling scales it down as a whole,
-// towards its centre, until it is as wide as the blocks below (the 1300 px column, or the side padding on
-// small screens), its corners rounding to 12 px — the way swan.so tucks its last block in. A transform:
-// the video never reflows.
-const hero = document.querySelector('.hero');
-const stage = document.querySelector('.hero-stage');
-if (hero && stage && !reduceMotion) {
-  let fitQueued = false;
-  const fit = () => {
-    fitQueued = false;
-    const vw = document.documentElement.clientWidth, pad = vw <= 760 ? 16 : 24;
-    const travel = Math.max(1, hero.offsetHeight - stage.offsetHeight);
-    const p = Math.min(1, Math.max(0, -hero.getBoundingClientRect().top / travel));
-    const end = Math.min(1300, vw - 2 * pad) / vw, s = 1 - (1 - end) * p;
-    stage.style.setProperty('--s', s.toFixed(4));
-    // Scaled down, the card leaves a strip of its full-size box empty below it; pull the next block up so the
-    // gap is the same as between the blocks below (88 px; 32 px on phones), whatever the screen.
-    const gap = vw <= 760 ? 32 : 88, below = parseFloat(getComputedStyle(hero.nextElementSibling).paddingTop) || 0;
-    hero.style.marginBottom = `${(gap - below - (1 - end) * stage.offsetHeight / 2).toFixed(1)}px`;
-    stage.style.setProperty('--r', `${(12 * p / s).toFixed(1)}px`); // 12 px once scaled
-  };
-  const queueFit = () => { if (!fitQueued) { fitQueued = true; requestAnimationFrame(fit); } };
-  addEventListener('scroll', queueFit, {passive: true});
-  addEventListener('resize', queueFit);
-  fit();
-}

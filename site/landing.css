@@ -108,39 +108,16 @@ img { display: block; max-width: 100%; height: auto; }
 .nav-links a:hover { color: var(--content-primary); }
 
 
-/* Hero: the map turns behind the whole first screen, under the floating header too; the headline sits on it.
-   The stage stays pinned for a while as you scroll, and landing.js scales it down as a whole (--s), towards
-   its centre, into a card as wide as the blocks below, its corners rounding (--r); then it scrolls away. */
-.hero { height: calc(100svh + 45svh); }
+/* Hero: the headline, then the app over a wallpaper (the header floats above, so the top padding clears it) */
+.hero { padding: 148px 24px 24px; } /* + the 64 px above the features = the 88 px between blocks */
+.hero .title { max-width: 700px; }
+.wallpaper { background: #D9DEE3 url(./img/hero-wallpaper.webp) center bottom / cover no-repeat; }
 .hero-stage {
-  position: sticky;
-  top: 0;
-  height: 100svh;
-  min-height: 560px;
-  max-height: 1200px;
-  overflow: hidden;
-  background: #F2F3F4;
-  transform: scale(var(--s, 1));
-  transform-origin: 50% 50%;
-  clip-path: inset(0 round var(--r, 0px));
-}
-.hero-map {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.hero-copy {
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  padding: calc(68px + clamp(56px, 12vh, 150px)) 0 0 clamp(24px, 5.5vw, 112px);
-}
-.hero-copy .hero-title {
-  max-width: 15em;
-  font-size: clamp(40px, 5.2vw, 88px);
+  margin-top: 56px;
+  border-radius: var(--radius);
+  padding: 50px 8%;
+  display: flex;
+  justify-content: center;
 }
 .shot {
   width: 100%;
@@ -250,8 +227,6 @@ img { display: block; max-width: 100%; height: auto; }
   .js .in .w { animation: none; }
   .js .fade { opacity: 1; transition: none; }
   .marquee-track { animation: none; }
-  .hero { height: auto; }
-  .hero-stage { position: relative; }
 }
 
 /* Phone */
@@ -259,8 +234,8 @@ img { display: block; max-width: 100%; height: auto; }
   .nav-links { display: none; }
   .nav { width: calc(100% - 32px); }
   .nav-row { justify-content: space-between; }
-  .hero-stage { height: 88svh; min-height: 520px; }
-  .hero-copy { padding: 108px 20px 0; }
+  .hero { padding: 100px 16px 0; }
+  .hero-stage { margin-top: 32px; padding: 24px 4%; }
   .feature-list { gap: 32px; }
   .feat .media { padding: 0 16px 16px; }
   .feat .txt { padding: 24px 16px; }

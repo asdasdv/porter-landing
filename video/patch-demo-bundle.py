@@ -1,6 +1,7 @@
 # Patches a local copy of the demo's built bundle for the hero fly-over (never the warehouse repo itself):
 # the big warehouse, full detail at any distance, no camera damping, 3D up to 3x with no auto resolution.
-# usage: python3 patch-demo-bundle.py <copy>/assets/index-*.js
+# usage: python3 patch-demo-bundle.py <copy>/assets/index-*.js [--same-size]
+# `--same-size` keeps the demo's own warehouse (the hero with the app's panels around the map).
 import re
 import sys
 
@@ -17,8 +18,9 @@ def sub(name, pattern, repl):
 
 
 # The site seeds the 'medium' warehouse; 'large' with four bands each side is about three times its area.
-sub('large warehouse', r'=(\w+)\(`medium`\)', r'=\1(`large`)')
-sub('four bands', r'large:\{varied:!0,x0:', 'large:{varied:!0,bands:4,x0:')
+if '--same-size' not in sys.argv:
+    sub('large warehouse', r'=(\w+)\(`medium`\)', r'=\1(`large`)')
+    sub('four bands', r'large:\{varied:!0,x0:', 'large:{varied:!0,bands:4,x0:')
 # Shelf boxes: near detail (every carton) at any distance; box tape and labels too; robots never simplified.
 sub('box detail', r'(\w+)=(\w+)<110\?0:\2<380\?1:2', r'\1=\2<1e9?0:\2<380?1:2')
 sub('fine detail', r'fineDetail&&\((\w+)\.visible=(\w+)<140\)', r'fineDetail&&(\1.visible=\2<1e9)')

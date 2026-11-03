@@ -40,9 +40,10 @@ https://warehouse.kaifparty.workers.dev/ и монтируются в Remotion.
 склада не трогаем): склад `large` с `bands:4` (в ~3 раза больше), детализация как вблизи на любом расстоянии
 (`n=t<1e9?0`, `fineDetail … i<1e9`, роботы `>1e9`), без затухания камеры (`enableDamping=!1`), разрешение до 3×
 (`Math.min(devicePixelRatio,3)`, автоподстройка выключена). Подписи зон и Receiving/Dispatch остаются, панели скрыты.
-Для сайта (лимит Cloudflare — 25 МБ на файл), 24 к/с, двухпроходное сжатие под ~21 МБ с бережными к тонким линиям
-настройками: `hero-hevc.mp4` (HEVC, Safari/Chrome на Mac), `hero.mp4` (H.264, остальные), `hero-mobile.mp4`
-(середина кадра 864×1800, ~7,5 МБ, `media="(max-width: 760px)"`).
+Шапка сайта (с 2026-11-03) — приложение как есть поверх фоновой картинки: `UI=1 DEMO=http://localhost:8768/ node
+record-hero-frames.mjs 36` (окно 1440×900 в 3×, склад обычного размера — бандл патчится с `--same-size`, панели на месте),
+затем `sh encode-hero.sh`: `hero-hevc.mp4` (HEVC, Safari/Chrome на Mac), `hero.mp4` (H.264), оба 2400 px, двухпроходно
+под лимит Cloudflare 25 МБ на файл; `hero-mobile.mp4` 1280 px для телефонов; обложка — первый кадр.
 
 **Другая сборка демо.** `DEMO=http://localhost:8765/ node record-receive.mjs` снимает не живое демо, а локальную
 сборку (например, ветку: `git archive origin/<ветка> locus-cloudflare | tar -x` и `python3 -m http.server 8765`).
