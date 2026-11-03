@@ -193,7 +193,7 @@ img { display: block; max-width: 100%; height: auto; }
   background: var(--surface-secondary);
   overflow: hidden;
 }
-.marquee-track { display: flex; align-items: flex-start; width: max-content; animation: marquee 200s linear infinite reverse; /* left to right, ~30 px/s with fifteen cards a set */ }
+.marquee-track { display: flex; align-items: flex-start; width: max-content; animation: marquee 200s linear infinite; /* right to left, ~30 px/s with fifteen cards a set */ }
 .marquee:hover .marquee-track { animation-play-state: paused; }
 .tile {
   width: clamp(300px, 30vw, 440px);
