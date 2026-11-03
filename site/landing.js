@@ -36,12 +36,14 @@ if (nav) {
     copy.classList.add('measure');
     copy.setAttribute('aria-hidden', 'true');
     nav.append(copy);
-    nav.style.setProperty('--pill', `${Math.ceil(copy.getBoundingClientRect().width)}px`);
+    nav.style.setProperty('--pill', `${Math.ceil(copy.getBoundingClientRect().width) + 2}px`);
     copy.remove();
   };
   const update = () => nav.classList.toggle('compact', window.scrollY > 40);
   measure();
   document.fonts?.ready.then(measure);
+  addEventListener('load', measure);
+  document.fonts?.addEventListener('loadingdone', measure); // Inter can arrive after fonts.ready
   update();
   addEventListener('scroll', update, {passive: true});
   addEventListener('resize', measure);

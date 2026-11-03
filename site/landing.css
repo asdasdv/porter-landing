@@ -86,6 +86,7 @@ img { display: block; max-width: 100%; height: auto; }
   align-items: center;
   justify-content: space-between;
   gap: 32px;
+  white-space: nowrap; /* the pill is measured; if a font arrives later, nothing wraps inside it */
   border-radius: 16px;
   background: rgba(255, 255, 255, 0);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0);
