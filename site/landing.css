@@ -196,15 +196,15 @@ img { display: block; max-width: 100%; height: auto; }
 .marquee-track { display: flex; align-items: flex-start; width: max-content; animation: marquee 200s linear infinite reverse; /* left to right, ~30 px/s with fifteen cards a set */ }
 .marquee:hover .marquee-track { animation-play-state: paused; }
 .tile {
-  width: clamp(260px, 26vw, 380px);
+  width: clamp(300px, 30vw, 440px);
   margin: 0 32px 0 0; /* the right margin is the gap, so one set is exactly a third of the track */
 }
 .tile-media video {
   display: block;
   width: 100%;
+  height: auto; /* the height="500" attribute would otherwise win over the aspect ratio */
   aspect-ratio: 16 / 10;
   object-fit: cover;
-  object-position: top left;
   border-radius: var(--radius);
   background: var(--surface-primary);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
