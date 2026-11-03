@@ -8,8 +8,8 @@ export default {
   first: 'receive-first.png',
   segments: [
     {from: 2.25, to: 9.85, rate: 1.1, caption: 'Pick the product and the cell'},             // Receive → find the product → Receive 2 boxes
-    {from: 9.85, to: 12.9, rate: 1.3, caption: 'Each box becomes a robot task'},             // toast and the robot tasks appear
-    {from: 12.9, to: 14.7, rate: 1, caption: 'Each box becomes a robot task'},               // the app's camera flies to the box on its way to the dock
+    {from: 9.85, to: 12.9, rate: 1.3, caption: 'The app sends a robot for the boxes'},             // toast and the robot tasks appear
+    {from: 12.9, to: 14.7, rate: 1, caption: 'The app sends a robot for the boxes'},               // the app's camera flies to the box on its way to the dock
     {from: 107.97, to: 112.47, rate: 1.5, cut: true, caption: 'A free robot picks it up at the dock'}, // a robot drives up to the belt
     {from: 112.47, to: 118.57, rate: 1, caption: 'A free robot picks it up at the dock'},             // it takes the box and drives off
     {from: 145.97, to: 148.97, rate: 1, cut: true, caption: 'Carries it across the warehouse'},  // across the warehouse
