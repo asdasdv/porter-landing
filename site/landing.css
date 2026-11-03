@@ -9,7 +9,6 @@
   --on-accent: #FFFFFF;
   --shadow-modal: 0 8px 32px rgba(0, 0, 0, 0.16);
   --radius: 12px;
-  --radius-sm: 8px;
   --ease-out: cubic-bezier(.22, 1, .36, 1);
 }
 
@@ -60,7 +59,7 @@ img { display: block; max-width: 100%; height: auto; }
   transition: filter .2s ease;
 }
 .btn:hover { color: var(--on-accent); filter: brightness(0.94); }
-.btn-sm { height: 36px; padding: 0 12px; border-radius: var(--radius-sm); }
+.btn-sm { height: 36px; padding: 0 12px; }
 .btn:focus-visible, .nav a:focus-visible {
   outline: 2px solid var(--content-primary);
   outline-offset: 2px;
