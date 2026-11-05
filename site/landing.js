@@ -104,28 +104,6 @@ if (feats.length) {
   }
 }
 
-// Header links fill as you read: a block's progress runs from its top reaching the middle of the screen to its
-// bottom reaching it.
-const navLinks = [...document.querySelectorAll('.nav-links a')]
-  .map((a) => [a, document.querySelector(a.getAttribute('href'))]).filter(([, s]) => s);
-if (navLinks.length) {
-  let queued = false;
-  const fill = () => {
-    queued = false;
-    const mid = window.innerHeight / 2;
-    for (const [a, s] of navLinks) {
-      const r = s.getBoundingClientRect();
-      const top = feats.includes(s) ? flowTop(s) : r.top; // a stuck card stands still, so use its place in the flow
-      const p = Math.min(1, Math.max(0, (mid - top) / r.height));
-      a.style.setProperty('--p', `${(p * 100).toFixed(1)}%`);
-    }
-  };
-  const queue = () => { if (!queued) { queued = true; requestAnimationFrame(fill); } };
-  addEventListener('scroll', queue, {passive: true});
-  addEventListener('resize', queue);
-  fill();
-}
-
 // Reveal each block once its top is in view. Checked on scroll, like the header links, so a block never
 // waits on an observer; blocks already scrolled past show too, so a jump never leaves one hidden above.
 const blocks = [...document.querySelectorAll('[data-rv]')];

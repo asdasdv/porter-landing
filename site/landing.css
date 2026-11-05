@@ -111,15 +111,7 @@ img { display: block; max-width: 100%; height: auto; }
 .brand img { width: 24px; height: 24px; border-radius: 6px; }
 .nav-links { display: flex; gap: 24px; font-size: 14px; }
 .nav-links a { text-decoration: none; color: var(--content-secondary); }
-/* Where you are: as you scroll through a block, its link fills with the dark text colour from left to right
-   (landing.js sets --p, 0–100 %); blocks already passed stay filled. */
-.js .nav-links a {
-  background: linear-gradient(to right, var(--content-primary) var(--p, 0%), var(--content-secondary) var(--p, 0%));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.nav-links a:hover, .js .nav-links a:hover { -webkit-text-fill-color: var(--content-primary); }
+.nav-links a:hover { color: var(--content-primary); }
 
 
 /* Hero: the headline, then the app over a wallpaper (the header floats above, so the top padding clears it) */
