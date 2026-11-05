@@ -279,7 +279,7 @@ img { display: block; max-width: 100%; height: auto; }
   .tile { width: 72vw; margin-right: 16px; }
 }
 
-/* Header links glide to their section (native, only for jumps; the wheel scrolls as usual) */
-@media (prefers-reduced-motion: no-preference) {
-  html { scroll-behavior: smooth; }
-}
+/* Smooth scrolling is landing.js's (Lenis); these are the rules Lenis asks for */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-stopped { overflow: clip; }
+.lenis.lenis-smooth iframe { pointer-events: none; }

@@ -1,4 +1,14 @@
+import Lenis from './vendor/lenis.mjs';
+
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Smooth scrolling: the wheel glides the page with a little inertia instead of stepping. Touch keeps the phone's
+// own scrolling, reduced motion keeps the browser's. A sideways swipe over the row of tiles is left to that row.
+const lenis = reduceMotion ? null : new Lenis({
+  autoRaf: true,
+  lerp: 0.09,
+  virtualScroll: ({deltaX, deltaY, event}) => !(Math.abs(deltaX) > Math.abs(deltaY) && event.target.closest?.('.marquee')),
+});
 
 // Headings: wrap each word, then number the words by the line they sit on, so each line rises as one.
 for (const el of document.querySelectorAll('[data-words]')) {
@@ -98,7 +108,8 @@ if (feats.length) {
     if (!card) continue;
     a.addEventListener('click', (e) => {
       e.preventDefault();
-      window.scrollTo({top: window.scrollY + flowTop(card) - stickTop(card), behavior: reduceMotion ? 'auto' : 'smooth'});
+      const top = window.scrollY + flowTop(card) - stickTop(card);
+      if (lenis) lenis.scrollTo(top, {duration: 1.2}); else window.scrollTo(0, top);
       history.replaceState(null, '', `#${card.id}`);
     });
   }
