@@ -257,7 +257,7 @@ img { display: block; max-width: 100%; height: auto; }
 
 /* Footer */
 .foot { padding: 0 24px 48px; font-size: 14px; }
-.foot-row { padding-top: 24px; border-top: 1px solid var(--line); }
+.foot-row { text-align: center; }
 
 /* Phone */
 @media (max-width: 760px) {
