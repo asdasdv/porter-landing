@@ -70,7 +70,25 @@ if (feats.length) {
       card.style.setProperty('--stick', `${Math.round(top)}px`);
     });
   };
+  // Depth: --t is how far the next card has slid over this one (0–1); a card also sinks with the ones above it.
+  let queued = false;
+  const depth = () => {
+    queued = false;
+    let below = 0;
+    for (let i = feats.length - 2; i >= 0; i--) {
+      const card = feats[i], next = feats[i + 1];
+      const bottom = card.getBoundingClientRect().top + card.offsetHeight;
+      const t = Math.min(1, Math.max(0, (bottom - next.getBoundingClientRect().top) / Math.max(1, bottom - stickTop(next))));
+      below = t + below;
+      card.style.setProperty('--t', below.toFixed(3));
+      next.style.setProperty('--s', t.toFixed(3));
+    }
+  };
+  const queueDepth = () => { if (!queued) { queued = true; requestAnimationFrame(depth); } };
+  addEventListener('scroll', queueDepth, {passive: true});
+  addEventListener('resize', queueDepth);
   setStick();
+  depth();
   addEventListener('load', setStick);
   addEventListener('resize', setStick);
   document.fonts?.ready.then(setStick);
@@ -167,6 +185,56 @@ if (!reduceMotion && loops.length) {
     if (document.hidden) { if (active) active.pause(); active = null; } else queue();
   });
   queue();
+}
+
+// The row of tiles in the last card drifts right to left on its own; drag it with the mouse, or swipe or scroll it
+// sideways on a trackpad or phone, and it waits a moment after you let go before drifting on. The track holds
+// the set three times: it starts on the middle copy and jumps by one set when it nears either end, so it never runs out.
+const marquee = document.querySelector('.marquee');
+if (marquee) {
+  const track = marquee.querySelector('.marquee-track');
+  const tiles = track.children, perSet = tiles.length / 3;
+  const setWidth = () => tiles[perSet].offsetLeft - tiles[0].offsetLeft;
+  let pos = 0, last = 0, holdUntil = 0, hovered = false, drag = null;
+  const place = (x) => { pos = x; marquee.scrollLeft = x; };
+  const wrap = () => {
+    const w = setWidth();
+    if (pos < w * 0.5) place(pos + w); else if (pos > w * 1.5) place(pos - w);
+  };
+  place(setWidth());
+  addEventListener('load', () => place(setWidth()));
+  const hold = (ms) => { holdUntil = performance.now() + ms; };
+  const tick = (now) => {
+    const dt = Math.min(64, now - (last || now));
+    last = now;
+    if (!drag && !hovered && now > holdUntil && !reduceMotion) { place(pos + dt * 0.03); wrap(); } // 30 px a second
+    else if (!drag && now > holdUntil) wrap();
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+  // A scroll we did not cause is the visitor's: follow it and pause the drift.
+  marquee.addEventListener('scroll', () => {
+    if (Math.abs(marquee.scrollLeft - pos) > 2) { pos = marquee.scrollLeft; hold(1500); }
+  }, {passive: true});
+  marquee.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') hovered = true; });
+  marquee.addEventListener('pointerleave', () => { hovered = false; });
+  marquee.addEventListener('touchstart', () => hold(1500), {passive: true});
+  // Mouse drag (touch scrolls the row natively).
+  marquee.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    drag = {x: e.clientX, from: pos, moved: false};
+    marquee.setPointerCapture(e.pointerId);
+    marquee.classList.add('dragging');
+  });
+  marquee.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    const dx = e.clientX - drag.x;
+    if (Math.abs(dx) > 3) drag.moved = true;
+    place(drag.from - dx);
+  });
+  const endDrag = () => { if (!drag) return; drag = null; marquee.classList.remove('dragging'); hold(1500); wrap(); };
+  marquee.addEventListener('pointerup', endDrag);
+  marquee.addEventListener('pointercancel', endDrag);
 }
 
 // Card clips in the last block: every clip on screen plays, the ones that have slid out of view pause.

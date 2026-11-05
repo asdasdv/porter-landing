@@ -146,7 +146,7 @@ img { display: block; max-width: 100%; height: auto; }
 
 
 /* Feature cards */
-.features { padding: 64px 24px; }
+.features { padding: 64px 24px 128px; }
 .feature-list { display: flex; flex-direction: column; gap: 88px; }
 .feat {
   display: flex;
@@ -161,7 +161,18 @@ img { display: block; max-width: 100%; height: auto; }
   position: sticky;
   top: var(--stick, 88px);
 }
-.feat + .feat { box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.06); }
+/* Depth: as the next card slides over, the one under it shrinks back a little and darkens, and the one on top
+   casts a shadow on it (landing.js sets --t, 0–1, on the card being covered and --s on the one covering it) */
+.feat { transform: scale(calc(1 - var(--t, 0) * 0.05)); transform-origin: 50% 0; }
+.feat::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: calc(var(--t, 0) * 0.08);
+  pointer-events: none;
+}
+.feat + .feat { box-shadow: 0 -12px 40px rgba(0, 0, 0, calc(var(--s, 0) * 0.14)); }
 .feat-rev { flex-direction: row-reverse; }
 .feat .txt {
   flex: 1 1 340px;
@@ -175,17 +186,25 @@ img { display: block; max-width: 100%; height: auto; }
 .feat .txt p { margin: 0; }
 .feat .media { flex: 999 1 600px; min-width: 0; padding: 40px; }
 
-/* Last block: a heading, then a big grey panel with one row of cards sliding past on its own */
-.more { padding: 24px 24px 128px; } /* + the 64 px under the features = the 88 px between blocks */
-.more .title { margin-bottom: 32px; }
-.panel {
-  padding: 64px 0 56px;
-  border-radius: var(--radius);
-  background: var(--surface-secondary);
-  overflow: hidden;
-}
+/* Last card: a heading, then one row of tiles sliding past on its own; landing.js moves it and lets you drag or
+   swipe it (without JS the CSS animation runs) */
+.feat-more { display: block; padding: 40px 0; }
+.feat-more .title { padding: 0 24px; margin-bottom: 32px; }
+.marquee { overflow: hidden; }
 .marquee-track { display: flex; align-items: flex-start; width: max-content; animation: marquee 160s linear infinite; /* right to left, ~30 px/s with twelve cards a set */ }
 .marquee:hover .marquee-track { animation-play-state: paused; }
+.js .marquee {
+  overflow-x: auto;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.js .marquee::-webkit-scrollbar { display: none; }
+.js .marquee.dragging { cursor: grabbing; }
+.js .marquee-track { animation: none; padding-left: 24px; }
+.marquee video { -webkit-user-drag: none; pointer-events: none; }
 .tile {
   width: clamp(300px, 30vw, 440px);
   margin: 0 32px 0 0; /* the right margin is the gap, so one set is exactly a third of the track */
@@ -240,6 +259,7 @@ img { display: block; max-width: 100%; height: auto; }
 @media (prefers-reduced-motion: reduce) {
   .js .w, .js .fade, .js .feat[data-rv] { opacity: 1; transform: none; transition: none; }
   .marquee-track { animation: none; }
+  .feat { transform: none; }
 }
 
 /* Footer */
@@ -258,9 +278,10 @@ img { display: block; max-width: 100%; height: auto; }
   .feat .media { padding: 0 16px 16px; }
   .feat .txt { padding: 24px 16px; }
   .hero-title { font-size: 44px; }
-  .features, .more { padding-left: 16px; padding-right: 16px; }
-  .more { padding-bottom: 64px; }
-  .panel { padding: 32px 0; }
+  .features { padding: 64px 16px; }
+  .feat-more { padding: 24px 0; }
+  .feat-more .title { padding: 0 16px; margin-bottom: 24px; }
+  .js .marquee-track { padding-left: 16px; }
   .tile { width: 72vw; margin-right: 16px; }
 }
 
