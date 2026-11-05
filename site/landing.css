@@ -152,11 +152,16 @@ img { display: block; max-width: 100%; height: auto; }
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
-  background: var(--surface-secondary);
+  background: #F5F5F5; /* the grey of the other panels, made solid, so a card sliding over another hides it */
   border-radius: var(--radius);
   overflow: hidden;
   scroll-margin-top: 88px; /* the floating header (16 + 52 px) and a little air */
+  /* The cards stack: each one sticks under the header (landing.js sets --stick a step lower for the next one,
+     and higher for a card too tall to fit), and the next one slides up over it */
+  position: sticky;
+  top: var(--stick, 88px);
 }
+.feat + .feat { box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.06); }
 .feat-rev { flex-direction: row-reverse; }
 .feat .txt {
   flex: 1 1 340px;

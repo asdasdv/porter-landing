@@ -50,6 +50,42 @@ if (nav) {
   addEventListener('resize', measure);
 }
 
+// Feature cards stack as you scroll (position: sticky). Each sticks a step below the one before, so the edges
+// of the cards underneath peek out; a card too tall for the screen sticks higher, with its bottom in view.
+const feats = [...document.querySelectorAll('.feat')];
+const featList = feats[0]?.parentElement;
+const stickTop = (card) => parseFloat(card.style.getPropertyValue('--stick')) || 88;
+// Where a card would be if it did not stick: the list's top plus the cards and gaps above it.
+const flowTop = (card) => {
+  let top = featList.getBoundingClientRect().top;
+  const gap = parseFloat(getComputedStyle(featList).rowGap) || 0;
+  for (const c of feats) { if (c === card) break; top += c.offsetHeight + gap; }
+  return top;
+};
+if (feats.length) {
+  const setStick = () => {
+    feats.forEach((card, i) => {
+      const base = parseFloat(getComputedStyle(card).scrollMarginTop) || 88;
+      const top = Math.min(base + i * 16, window.innerHeight - card.offsetHeight - 16);
+      card.style.setProperty('--stick', `${Math.round(top)}px`);
+    });
+  };
+  setStick();
+  addEventListener('load', setStick);
+  addEventListener('resize', setStick);
+  document.fonts?.ready.then(setStick);
+  // A stuck card already looks in view to the browser, so header links scroll to where the card sits in the flow.
+  for (const a of document.querySelectorAll('a[href^="#"]')) {
+    const card = feats.find((c) => `#${c.id}` === a.getAttribute('href'));
+    if (!card) continue;
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({top: window.scrollY + flowTop(card) - stickTop(card), behavior: reduceMotion ? 'auto' : 'smooth'});
+      history.replaceState(null, '', `#${card.id}`);
+    });
+  }
+}
+
 // Header links fill as you read: a block's progress runs from its top reaching the middle of the screen to its
 // bottom reaching it.
 const navLinks = [...document.querySelectorAll('.nav-links a')]
@@ -61,7 +97,8 @@ if (navLinks.length) {
     const mid = window.innerHeight / 2;
     for (const [a, s] of navLinks) {
       const r = s.getBoundingClientRect();
-      const p = Math.min(1, Math.max(0, (mid - r.top) / r.height));
+      const top = feats.includes(s) ? flowTop(s) : r.top; // a stuck card stands still, so use its place in the flow
+      const p = Math.min(1, Math.max(0, (mid - top) / r.height));
       a.style.setProperty('--p', `${(p * 100).toFixed(1)}%`);
     }
   };
@@ -106,8 +143,11 @@ if (!reduceMotion && loops.length) {
     let best = null, bestDist = Infinity;
     for (const v of loops) {
       const r = v.getBoundingClientRect();
-      const seen = Math.max(0, Math.min(r.bottom, h) - Math.max(r.top, 0)) / Math.max(1, r.height);
-      const dist = Math.abs((r.top + r.bottom) / 2 - mid);
+      // The next card slides over this one, so only the part above it counts as on screen.
+      const card = v.closest('.feat'), next = card && feats[feats.indexOf(card) + 1];
+      const top = Math.max(r.top, 0), bottom = Math.min(r.bottom, h, next ? next.getBoundingClientRect().top : Infinity);
+      const seen = Math.max(0, bottom - top) / Math.max(1, r.height);
+      const dist = Math.abs((top + bottom) / 2 - mid);
       if (seen >= 0.6 && dist < bestDist) { best = v; bestDist = dist; }
     }
     if (best === active) return;
