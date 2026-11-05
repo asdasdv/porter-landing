@@ -11,12 +11,14 @@ export const DEMO = process.env.DEMO || 'https://warehouse.kaifparty.workers.dev
 // (1.5x → 1x) when frames run slow, and the screencast makes them slow, so without it the map comes out soft.
 // `virtualClock`: the page's time (performance.now and requestAnimationFrame) stands still until
 // `window.__clock.advance(ms)` moves it — for frame-by-frame takes, where each frame may take long to draw.
-export async function openDemo({width = 1440, height = 900, scale = 2, steadyClock = false, virtualClock = false} = {}) {
+// `canvasScale` (default: the page scale) lets the 3D draw finer than the screen and be scaled down, which smooths thin
+// steel at a distance. The demo's bundle must allow it (patch-demo-bundle.py lifts its 1.5× cap to 3×).
+export async function openDemo({width = 1440, height = 900, scale = 2, canvasScale = Number(process.env.CANVAS_SCALE) || scale, steadyClock = false, virtualClock = false} = {}) {
   const browser = await chromium.launch({channel: 'chromium',
     args: ['--enable-gpu', '--ignore-gpu-blocklist', '--use-angle=metal', `--force-device-scale-factor=${scale}`]});
   const context = await browser.newContext({viewport: {width, height}});
   // The compositor renders at `scale`; tell the page too, so the 3D canvas gets a matching backing store.
-  await context.addInitScript((scale) => Object.defineProperty(window, 'devicePixelRatio', {get: () => scale, configurable: true}), scale);
+  await context.addInitScript((scale) => Object.defineProperty(window, 'devicePixelRatio', {get: () => scale, configurable: true}), canvasScale);
   if (steadyClock) await context.addInitScript(() => {
     const raf = window.requestAnimationFrame.bind(window);
     let real = -1, t = 0;
@@ -32,6 +34,8 @@ export async function openDemo({width = 1440, height = 900, scale = 2, steadyClo
   });
   const page = await context.newPage();
   await page.goto(DEMO, {waitUntil: 'networkidle'});
+  // The demo shows a loading screen until its 3D models are in and the shaders compiled.
+  await page.waitForFunction(() => !document.getElementById('boot'), null, {timeout: 20000}).catch(() => {});
   await page.waitForTimeout(4000);
   return {browser, page};
 }

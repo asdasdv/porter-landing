@@ -10,7 +10,7 @@ await d.place(980, 420);
 const stop = await startCapture(page, 'raw/find-frames');
 const row = (type, n = 0) => `.lc-row[data-pick="${type}"] >> nth=${n}`;
 await d.wait(300);
-for (const [type, n, name, hold] of [['zone', 0, 'zone', 1300], ['rack', 0, 'rack', 1300], ['shelf', 2, 'shelf', 1200], ['location', 0, 'cell', 1000], ['box', 0, 'box', 1700]]) {
+for (const [type, n, name, hold] of [['zone', 0, 'zone', 1700], ['rack', 0, 'rack', 1700], ['shelf', 2, 'shelf', 1500], ['location', 0, 'cell', 1300], ['box', 0, 'box', 1900]]) {
   await d.moveToEl(row(type, n), {ms: 550, dx: 0.3});
   await d.wait(120); await d.click(); d.mark('scene', {name});
   await d.wait(hold);

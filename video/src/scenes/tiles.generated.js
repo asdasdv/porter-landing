@@ -6,20 +6,20 @@ export default {
   "first": "tile-today-first.png",
   "segments": [
    {
-    "from": 0.4,
-    "to": 10.37,
+    "from": 0.39,
+    "to": 10.29,
     "rate": 1
    }
   ],
   "camera": [
    {
-    "t": 0.4,
+    "t": 0.39,
     "s": 1,
     "x": 720,
     "y": 450
    }
   ],
-  "cursorUntil": 11.37,
+  "cursorUntil": 11.29,
   "loopFade": 0.4
  },
  "occupancy": {
@@ -29,7 +29,7 @@ export default {
   "segments": [
    {
     "from": 0.39,
-    "to": 9.59,
+    "to": 9.57,
     "rate": 1
    }
   ],
@@ -41,7 +41,7 @@ export default {
     "y": 450
    }
   ],
-  "cursorUntil": 10.59,
+  "cursorUntil": 10.57,
   "loopFade": 0.4
  },
  "inventory": {
@@ -51,7 +51,7 @@ export default {
   "segments": [
    {
     "from": 0.39,
-    "to": 8.93,
+    "to": 8.97,
     "rate": 1
    }
   ],
@@ -63,7 +63,7 @@ export default {
     "y": 450
    }
   ],
-  "cursorUntil": 9.93,
+  "cursorUntil": 9.97,
   "loopFade": 0.4
  },
  "fleet": {
@@ -73,7 +73,7 @@ export default {
   "segments": [
    {
     "from": 0.39,
-    "to": 9.11,
+    "to": 9.15,
     "rate": 1
    }
   ],
@@ -85,7 +85,7 @@ export default {
     "y": 450
    }
   ],
-  "cursorUntil": 10.11,
+  "cursorUntil": 10.15,
   "loopFade": 0.4
  },
  "history": {
@@ -94,20 +94,20 @@ export default {
   "first": "tile-history-first.png",
   "segments": [
    {
-    "from": 0.41000000000000003,
-    "to": 8.56,
+    "from": 0.39,
+    "to": 8.55,
     "rate": 1
    }
   ],
   "camera": [
    {
-    "t": 0.41000000000000003,
+    "t": 0.39,
     "s": 1,
     "x": 720,
     "y": 450
    }
   ],
-  "cursorUntil": 9.56,
+  "cursorUntil": 9.55,
   "loopFade": 0.4
  },
  "move": {
@@ -116,20 +116,20 @@ export default {
   "first": "tile-move-first.png",
   "segments": [
    {
-    "from": 3.1999999999999997,
-    "to": 12.09,
+    "from": 3.25,
+    "to": 12.04,
     "rate": 1
    }
   ],
   "camera": [
    {
-    "t": 3.1999999999999997,
+    "t": 3.25,
     "s": 1,
     "x": 720,
     "y": 450
    }
   ],
-  "cursorUntil": 13.09,
+  "cursorUntil": 13.04,
   "loopFade": 0.4
  },
  "editor": {
@@ -138,20 +138,20 @@ export default {
   "first": "tile-editor-first.png",
   "segments": [
    {
-    "from": 3.88,
-    "to": 17.24,
+    "from": 3.84,
+    "to": 17.65,
     "rate": 1
    }
   ],
   "camera": [
    {
-    "t": 3.88,
+    "t": 3.84,
     "s": 1,
     "x": 720,
     "y": 450
    }
   ],
-  "cursorUntil": 18.24,
+  "cursorUntil": 18.65,
   "loopFade": 0.4
  },
  "layers": {
@@ -160,20 +160,20 @@ export default {
   "first": "tile-layers-first.png",
   "segments": [
    {
-    "from": 0.36,
-    "to": 12.2,
+    "from": 0.39,
+    "to": 12.24,
     "rate": 1
    }
   ],
   "camera": [
    {
-    "t": 0.36,
+    "t": 0.39,
     "s": 1,
     "x": 720,
     "y": 450
    }
   ],
-  "cursorUntil": 13.2,
+  "cursorUntil": 13.24,
   "loopFade": 0.4
  },
  "docks": {
@@ -183,7 +183,7 @@ export default {
   "segments": [
    {
     "from": 0.39,
-    "to": 8.19,
+    "to": 8.22,
     "rate": 1
    }
   ],
@@ -195,7 +195,7 @@ export default {
     "y": 450
    }
   ],
-  "cursorUntil": 9.19,
+  "cursorUntil": 9.22,
   "loopFade": 0.4
  },
  "big": {
@@ -204,20 +204,20 @@ export default {
   "first": "tile-big-first.png",
   "segments": [
    {
-    "from": 1.52,
-    "to": 8.46,
+    "from": 1.51,
+    "to": 8.43,
     "rate": 1
    }
   ],
   "camera": [
    {
-    "t": 1.52,
+    "t": 1.51,
     "s": 1,
     "x": 720,
     "y": 450
    }
   ],
-  "cursorUntil": 9.46,
+  "cursorUntil": 9.43,
   "loopFade": 0.4
  },
  "product": {
@@ -226,20 +226,20 @@ export default {
   "first": "tile-product-first.png",
   "segments": [
    {
-    "from": 0.51,
-    "to": 7.27,
+    "from": 0.5,
+    "to": 7.21,
     "rate": 1
    }
   ],
   "camera": [
    {
-    "t": 0.51,
+    "t": 0.5,
     "s": 1,
     "x": 720,
     "y": 450
    }
   ],
-  "cursorUntil": 8.27,
+  "cursorUntil": 8.21,
   "loopFade": 0.4
  },
  "parking": {
@@ -248,14 +248,14 @@ export default {
   "first": "tile-parking-first.png",
   "segments": [
    {
-    "from": 4.79,
-    "to": 11.89,
+    "from": 4.720000000000001,
+    "to": 11.82,
     "rate": 1
    }
   ],
   "camera": [
    {
-    "t": 4.79,
+    "t": 4.720000000000001,
     "s": 1,
     "x": 720,
     "y": 450

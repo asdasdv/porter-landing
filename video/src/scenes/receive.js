@@ -7,26 +7,26 @@ export default {
   log: 'receive.json',
   first: 'receive-first.png',
   segments: [
-    {from: 2.25, to: 9.85, rate: 1.1},             // Receive → find the product → Receive 2 boxes
-    {from: 9.85, to: 12.9, rate: 1.3},             // toast and the robot tasks appear
-    {from: 12.9, to: 14.7, rate: 1},               // the app's camera flies to the box on its way to the dock
-    {from: 107.97, to: 112.47, rate: 1.5, cut: true}, // a robot drives up to the belt
-    {from: 112.47, to: 118.57, rate: 1},             // it takes the box and drives off
-    {from: 145.97, to: 148.97, rate: 1, cut: true},  // across the warehouse
-    {from: 167.57, to: 174.57, rate: 1, cut: true},  // the box goes onto its shelf, «put away»
+    {from: 2.05, to: 9.65, rate: 1.1},             // Receive → find the product → Receive 2 boxes
+    {from: 9.65, to: 12.7, rate: 1.3},             // toast and the robot tasks appear
+    {from: 12.7, to: 14.5, rate: 1},               // the app's camera flies to the box on its way to the dock
+    {from: 135.62, to: 140.12, rate: 1.5, cut: true}, // a robot drives up to the belt
+    {from: 140.12, to: 146.22, rate: 1},             // it takes the box and drives off
+    {from: 173.62, to: 176.62, rate: 1, cut: true},  // across the warehouse
+    {from: 195.22, to: 202.22, rate: 1, cut: true},  // the box goes onto its shelf, «put away»
   ],
   camera: [
-    {t: 2.25, s: 1, x: 720, y: 450},
-    {t: 2.75, s: 1, x: 720, y: 450},
-    {t: 3.4, s: 1.42, x: 720, y: 430},
-    {t: 9.5, s: 1.42, x: 720, y: 430},
-    {t: 10.15, s: 1, x: 720, y: 450},
-    {t: 107.97, s: 1, x: 720, y: 450},
-    {t: 109.97, s: 1.35, x: 720, y: 450},
-    {t: 169.87, s: 1.35, x: 720, y: 450},
-    {t: 170.87, s: 1, x: 720, y: 450},
-    {t: 174.57, s: 1, x: 720, y: 450},
+    {t: 2.05, s: 1, x: 720, y: 450},
+    {t: 2.55, s: 1, x: 720, y: 450},
+    {t: 3.2, s: 1.42, x: 720, y: 430},
+    {t: 9.3, s: 1.42, x: 720, y: 430},
+    {t: 9.95, s: 1, x: 720, y: 450},
+    {t: 135.62, s: 1, x: 720, y: 450},
+    {t: 137.62, s: 1.35, x: 720, y: 450},
+    {t: 197.52, s: 1.35, x: 720, y: 450},
+    {t: 198.52, s: 1, x: 720, y: 450},
+    {t: 202.22, s: 1, x: 720, y: 450},
   ],
-  cursorUntil: 13.6,
+  cursorUntil: 13.4,
   loopFade: 0.3,
 };
